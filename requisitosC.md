@@ -86,6 +86,7 @@ int desencriptarMenu(long long p, long long q, int e);
 
 ### Fluxo esperado
 
+
 1. `gerarChavePub` valida os primos, valida o `e` e grava `chavePub.txt`.
 2. `encriptarMenu` criptografa a mensagem e grava `textEncript.txt`.
 3. `desencriptarMenu` le `textEncript.txt`, calcula `d` e grava `textDencript.txt`.
@@ -100,7 +101,7 @@ int desencriptarMenu(long long p, long long q, int e);
 long long mod_pow(long long base, long long exponent, long long modulus);
 void encriptar(char *mensagem, long long mensagemencriptada[], long long n, long long e);
 void descriptografar(long long mensagemencriptada[], int tamanho, long long d, long long n);
-long long encotrarD(long long e, long long p, long long q);
+long long encontrarD(long long e, long long p, long long q);
 ```
 
 ### Recomendacoes

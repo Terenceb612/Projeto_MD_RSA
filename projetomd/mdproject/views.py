@@ -19,6 +19,31 @@ MENU_LIBRARY_NAME = 'menu.dll' if os.name == 'nt' else 'menu.so'
 MENU_LIBRARY_FILE = BASE_DIR / 'c_code' / MENU_LIBRARY_NAME
 
 
+def normalize_menu_source(source_text):
+    if not source_text:
+        return source_text
+
+    first_line_end = source_text.find('\n')
+    if first_line_end == -1:
+        first_line = source_text
+    else:
+        first_line = source_text[:first_line_end]
+
+    if 'menu.c' in first_line and '#include' in first_line:
+        prefix_index = first_line.find('menu.c')
+        remainder = first_line[prefix_index + len('menu.c'):]
+        if remainder.startswith('#include'):
+            tail = source_text[first_line_end:] if first_line_end != -1 else ''
+            return remainder + tail
+
+    if first_line.strip().endswith('menu.c'):
+        remainder = source_text[first_line_end + 1:] if first_line_end != -1 else ''
+        if remainder.lstrip().startswith('#include'):
+            return remainder
+
+    return source_text
+
+
 def load_menu_library():
     library_name = 'menu.dll' if os.name == 'nt' else 'menu.so'
     library_path = BASE_DIR / 'c_code' / library_name
@@ -61,6 +86,11 @@ def replace_c_sources_from_zip(zip_file):
             target_path = temp_dir_path / 'menu.c'
             with archive.open(menu_entry) as source, open(target_path, 'wb') as destination:
                 shutil.copyfileobj(source, destination)
+
+            source_text = target_path.read_text(encoding='utf-8', errors='replace')
+            normalized_text = normalize_menu_source(source_text)
+            if normalized_text != source_text:
+                target_path.write_text(normalized_text, encoding='utf-8')
 
             validate_result = subprocess.run(
                 ['gcc', '-fsyntax-only', str(target_path)],
