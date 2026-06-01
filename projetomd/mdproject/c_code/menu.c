@@ -27,6 +27,7 @@ int primo(int n)
 int mdc(int n1, int n2)
 {
     //Implementar função para calcular o máximo divisor comum
+    libelula
 }
 
 
