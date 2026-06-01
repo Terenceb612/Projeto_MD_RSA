@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 
 // FALTA IMPLEMENTAR ESSAS 3 fif
@@ -5,10 +9,6 @@ int gerarChavePub(long long primo1, long long primo2, long long expoente);
 int encriptarMenu(char *mensagem, long long n, long long e);
 int desencriptarMenu(long long p, long long q, int e);
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
 
 void limparBufferEntrada()
 {
@@ -68,10 +68,41 @@ int salvarEmArquivo(long long mensagemencriptada[], int tamanho)
     return 0;
 }
 
-//FALTA IMPLEMENTAR fif
+/*
+FUNCAO MOD POW
+
+terence: vou fazer uma maracutaia pra fazer a exponenciação ser mais eficiente
+ela se baseia no fato de que qualquer expoente pode ser escrito em binario, ex: 7 = 111 (binario)
+a cada iteracao, "expoente/2" descarata o bit da iteracao atual(resultado vai ser usado na prox) e expoente%2 le o valor (0 ou 1) 
+se for 0, nao inclui na soma
+a base é elevada ao quadrado a cada passo, o mod em cada produto serve pra o numero nunca crescer demais
+pq é melhor : se for elevando no seco fica O(n) multiplicacoes, essa solucao bacana ai faz com que seja O(logn), ideal pra quando o expoente crescer muito.
+exemplo : testa com  o expoente sendo um milhao e ve.
+fonte: achei em um video aleatorio de um cara mostrando o codigo dele pra o projeto. exempplo que pedi pro claude fazer:
+seja 13 o expoente entao podemos reescrever ele assim
+passo 1: 13 % 2 = 1  → inclui base^1    13 / 2 = 6
+passo 2:  6 % 2 = 0  → não inclui       6  / 2 = 3
+passo 3:  3 % 2 = 1  → inclui base^4    3  / 2 = 1
+passo 4:  1 % 2 = 1  → inclui base^8    1  / 2 = 0 → para
+
+resultado : base^1 × base^4 × base^8 = base^13
+*/
 long long mod_pow(long long base, long long exponent, long long modulus)
 {
-    //implementar função de exponenciação modular
+    long long resultado = 1; 
+    base = base % modulus;
+
+    while (exponent > 0)
+    {
+        if (exponent %2 == 1)
+        {
+            resultado = resultado * base % modulus; //nao pode abreviar o operador de multiplicacao, testei e deu erro essa bomba
+        }
+        exponent /=2;
+        base = base * base % modulus; 
+        
+    }
+    return resultado;
 }
 
 
@@ -80,8 +111,8 @@ void encriptar(char *mensagem, long long mensagemencriptada[], long long n, long
 {
     for (int i = 0; mensagem[i] != '\0'; i++)
     {
-        mensagemencriptada[i] = mensagem[i];
-        mensagemencriptada[i] = mod_pow(mensagemencriptada[i], e, n);
+        mensagemencriptada[i] = mensagem[i]; // ← aqui, converte char pra ASCII
+        mensagemencriptada[i] = mod_pow(mensagemencriptada[i], e, n); // ← aplica RSA
     }
 }
 
@@ -127,7 +158,8 @@ void convertascii(char mensagem[], long long mensagemencriptada[], int tamanho)
     }
 }
 
-//FALTA IMPLEMENTAR fif
+//FALTA IMPLEMENTAR fif, e essa funcao nao é eficiente, vamos usar euclides estendido para os primos
+
 long long encotrarD(long long e, long long p, long long q)
 {
     //Implementar função para encontrar o valor de D
