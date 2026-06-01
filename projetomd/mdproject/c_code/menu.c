@@ -1,3 +1,6 @@
+
+
+// FALTA IMPLEMENTAR ESSAS 3 fif
 int gerarChavePub(long long primo1, long long primo2, long long expoente);
 int encriptarMenu(char *mensagem, long long n, long long e);
 int desencriptarMenu(long long p, long long q, int e);
@@ -14,15 +17,18 @@ void limparBufferEntrada()
         ;
 }
 
+//FALTA IMPLEMENTAR fif
 int primo(int n)
 {
     //Implementar função para verificar se um número é primo
 }
 
+//FALTA IMPLEMENTAR fif
 int mdc(int n1, int n2)
 {
     //Implementar função para calcular o máximo divisor comum
 }
+
 
 void criarChavePub(long long n, long long e)
 {
@@ -34,7 +40,9 @@ void criarChavePub(long long n, long long e)
     return;
 }
 
-int gerarChavePub(long long primo1, long long primo2, long long expoente){
+//FALTA IMPLEMENTAR ESSA fif, o n ta dando erro por isso
+int gerarChavePub(long long primo1, long long primo2, long long expoente)
+{
     //Implementar lógica para ler a chave pública
     //Lembrar de não aceitar valores pequenos de tal forma que p*q < 256
     criarChavePub(n, expoente);
@@ -43,7 +51,9 @@ int gerarChavePub(long long primo1, long long primo2, long long expoente){
 
 // ------------------------------- ENCRYPT
 
-int salvarEmArquivo(long long mensagemencriptada[], int tamanho){
+
+int salvarEmArquivo(long long mensagemencriptada[], int tamanho)
+{
     FILE *file;
     file = fopen("textEncript.txt", "w");
     if (file == NULL){
@@ -58,13 +68,18 @@ int salvarEmArquivo(long long mensagemencriptada[], int tamanho){
     return 0;
 }
 
+//FALTA IMPLEMENTAR fif
 long long mod_pow(long long base, long long exponent, long long modulus)
 {
     //implementar função de exponenciação modular
 }
 
-void encriptar(char *mensagem, long long mensagemencriptada[], long long n, long long e){
-    for (int i = 0; mensagem[i] != '\0'; i++){
+
+// REVISAR ESSA PORRA, NAO ENTENDI A LOGICA 
+void encriptar(char *mensagem, long long mensagemencriptada[], long long n, long long e)
+{
+    for (int i = 0; mensagem[i] != '\0'; i++)
+    {
         mensagemencriptada[i] = mensagem[i];
         mensagemencriptada[i] = mod_pow(mensagemencriptada[i], e, n);
     }
@@ -73,7 +88,8 @@ void encriptar(char *mensagem, long long mensagemencriptada[], long long n, long
 // ---------------------- DESENCRIPTY
 
 
-int salvarEmArquivoD(char mensagemdesencriptada[], int tamanho){
+int salvarEmArquivoD(char mensagemdesencriptada[], int tamanho)
+{
     FILE *file;
     file = fopen("textDencript.txt", "w");
 
@@ -102,6 +118,7 @@ void descriptografar(long long mensagemencriptada[], int tamanho, long long d, l
     }
 }
 
+
 void convertascii(char mensagem[], long long mensagemencriptada[], int tamanho)
 {
     for (int i = 0; i < tamanho; i++)
@@ -110,10 +127,12 @@ void convertascii(char mensagem[], long long mensagemencriptada[], int tamanho)
     }
 }
 
+//FALTA IMPLEMENTAR fif
 long long encotrarD(long long e, long long p, long long q)
 {
     //Implementar função para encontrar o valor de D
 }
+
 
 void converterParaLongLong(char *str, long long a[], long long *tamanho)
 {
@@ -130,7 +149,8 @@ void converterParaLongLong(char *str, long long a[], long long *tamanho)
 
 
 
-int encriptarMenu(char* mensagem, long long n, long long e){
+int encriptarMenu(char* mensagem, long long n, long long e)
+{
     int tamanho = (int)strlen(mensagem);
     long long mensagemencriptada[tamanho];
     encriptar(mensagem, mensagemencriptada, n, e);
@@ -140,8 +160,9 @@ int encriptarMenu(char* mensagem, long long n, long long e){
 
 
 
-
-int desencriptarMenu(long long p, long long q, int e){
+//REVISAR, ACHO QUE TEM PROBLEMA AQUI 
+int desencriptarMenu(long long p, long long q, int e)
+{
     long long mensagemenc[100000], D, tamanho;
     char mensagem[10000];
     char linha[10000];
