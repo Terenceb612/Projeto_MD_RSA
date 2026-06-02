@@ -41,9 +41,14 @@ int primo(int n)
     return 1;
 }
 
+//cauet: mdc implementado
+/*
+A função verifica qual o maximo divisor comum entre dois numeros grandes, utilizando o algoritmo de euclides tradicional.
+A função usa aritmetica modular para simplificar a expressão ao máximo.
+Após a simplificação, encontra o mdc que é igual ao mdc da expressão original e retorna o resultado.
+*/
 int mdc(int n1, int n2)
 {
-    //FIZ O ALGORITMO DE EUCLIDES BEM RESENHA - Cauet
     while (n2 != 0)
     {
         int resto = n1 % n2;
