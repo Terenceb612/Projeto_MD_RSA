@@ -17,13 +17,30 @@ void limparBufferEntrada()
         ;
 }
 
-//FALTA IMPLEMENTAR fif
+//terence: impplementada : D
+/*terence:
+Se n tem um divisor, ele sempre vem em par: n = a * b.
+Se a > √n, então obrigatoriamente b < √n — o menor sempre fica abaixo da raiz.
+Logo, se nenhum número até √n divide n, não existe divisor — n é primo.
+Usar i*i <= n evita importar math.h e é equivalente a i <= √n.
+int primo(int n)
+*/
 int primo(int n)
 {
-    //Implementar função para verificar se um número é primo
+    if (n < 2)
+    {
+        return 0;
+    }
+    for(int i = 2; i * i <= n; i++)
+    {
+        if (n%i == 0)
+        {
+            return 0;
+        }
+    }
+    return 1;
 }
 
-//FALTA IMPLEMENTAR fif
 int mdc(int n1, int n2)
 {
     //FIZ O ALGORITMO DE EUCLIDES BEM RESENHA - Cauet
