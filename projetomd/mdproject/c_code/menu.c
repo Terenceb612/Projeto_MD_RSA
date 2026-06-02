@@ -26,7 +26,15 @@ int primo(int n)
 //FALTA IMPLEMENTAR fif
 int mdc(int n1, int n2)
 {
-    //Implementar função para calcular o máximo divisor comum
+    //FIZ O ALGORITMO DE EUCLIDES BEM RESENHA - Cauet
+    while (n2 != 0)
+    {
+        int resto = n1 % n2;
+        n1 = n2;
+        n2 = resto;
+    }
+
+    return n1;
 }
 
 
