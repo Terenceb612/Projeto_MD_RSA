@@ -70,12 +70,32 @@ void criarChavePub(long long n, long long e)
     return;
 }
 
+//cauet: função tot_euler feita, mas precisa ser revisada.
+
+//Função necessária para calcular a chave pública e privada.
+long long tot_euler(long long primo1, long long primo2, long long n)
+{
+    long long res = (primo1 - 1) * (primo2 - 1);
+    
+    return res;
+}
+
 //FALTA IMPLEMENTAR ESSA fif, o n ta dando erro por isso
+//cauet: logica de geração da chave pública parcialmente feita, precisa de revisão.
+//ainda é preciso implementar o calculo para encontrar o expoente ideal (mdc(expoente,tot_euler) == 1).
 int gerarChavePub(long long primo1, long long primo2, long long expoente)
 {
     //Implementar lógica para ler a chave pública
     //Lembrar de não aceitar valores pequenos de tal forma que p*q < 256
-    criarChavePub(n, expoente);
+    long long n = primo1 * primo2;
+    long long tot_res = tot_euler(primo1,primo2,n);
+    mdc(expoente,tot_res);
+
+    if (mdc(expoente,tot_res) == 1)
+    {
+        criarChavePub(n, expoente);
+    }
+
     return 0;
 }
 
