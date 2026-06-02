@@ -1,25 +1,26 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            Resultado
-        </title>
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    </head>
-    <body>
-        <div class="pag">
-            <div class="number">
-                <label>Primo 1:</label>
-                <label>Primo 2:</label>
-                <label>E:</label>
-            </div>
-            <div class="show">
-                <label>Mensagem criptografada ou descriptografada:</label>
-                <label>{{ encrypted_text }}</label>
-            </div>
-            
-            <a href="{% url 'mdproject:index' %}">Voltar ao menu inicial</a>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado — RSA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="page">
+        <div class="page-header">
+            <h1>Resultado</h1>
         </div>
-    </body>
+
+        <div class="card">
+            <span class="result-label">Mensagem processada</span>
+            <div class="result-box">{{ encrypted_text }}</div>
+        </div>
+
+        <a class="back-link" href="{% url 'mdproject:index' %}">← Voltar ao início</a>
+    </div>
+</body>
 </html>

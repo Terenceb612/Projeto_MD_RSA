@@ -1,64 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Tela Inicial</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA — Criptografia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h1>Projeto de Matemática Discreta: Criptografia</h1>
-    <h2>Enviar zip do aluno (menu.c)</h2>
-    <form method="POST" action="{% url 'mdproject:upload_c_zip' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="zip_file" accept=".zip">
-        <button type="submit">Enviar</button>
-    </form>
-    {% if upload_error %}
-        <p>{{ upload_error }}</p>
-    {% endif %}
-    {% if upload_success %}
-        <p>{{ upload_success }}</p>
-    {% endif %}
+    <div class="page">
+        <div class="page-header">
+            <h1>Criptografia RSA</h1>
+            <p>Projeto de Matemática Discreta</p>
+        </div>
 
-    <label>Chave pública:</label>
-    <a href="{% url 'mdproject:save' %}">Salvar chave publica</a>
+        <div class="card">
+            <p class="card-title">Envio de arquivo</p>
+            <form method="POST" action="{% url 'mdproject:upload_c_zip' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="field">
+                    <label>Arquivo do aluno (menu.c)</label>
+                    <input type="file" name="zip_file" accept=".zip">
+                </div>
+                <button class="btn btn-primary" type="submit">Enviar ZIP</button>
+            </form>
+            {% if upload_error %}
+                <div class="status status-error">{{ upload_error }}</div>
+            {% endif %}
+            {% if upload_success %}
+                <div class="status status-success">{{ upload_success }}</div>
+            {% endif %}
+        </div>
 
-    <label>Criptografar:</label>
-    <a href="{% url 'mdproject:crypt' %}">Cripto</a>
+        <div class="card">
+            <p class="card-title">Operações</p>
+            <div class="nav-links">
+                <a class="nav-link" href="{% url 'mdproject:save' %}">
+                    Salvar chave pública
+                    <span class="nav-link-arrow">→</span>
+                </a>
+                <a class="nav-link" href="{% url 'mdproject:crypt' %}">
+                    Criptografar mensagem
+                    <span class="nav-link-arrow">→</span>
+                </a>
+                <a class="nav-link" href="{% url 'mdproject:descrypt' %}">
+                    Descriptografar mensagem
+                    <span class="nav-link-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </div>
 
-    <label>Descriptografar:</label>
-    <a href="{% url 'mdproject:descrypt' %}">Descripto</a>
+    <script>
+        function generateRandom(inputId) {
+            fetch('/mdproject/generate_random/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(inputId).value = data.random_number;
+            })
+            .catch(error => console.error('Erro:', error));
+        }
+    </script>
 </body>
-
-<script>
-    function generateRandom(inputId) {
-        fetch('/mdproject/generate_random/')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById(inputId).value = data.random_number;
-        })
-        .catch(error => console.error('Erro:', error));
-    }
-
-    function criptoNow(){
-
-    }
-    document.getElementById('encrypt-form').addEventListener('submit', function (e) {
-        e.preventDefault();  // Evita o envio padrão do formulário
-
-        const inputText = document.getElementById('input_text_encrypt').value;
-        const formData = new FormData();
-        formData.append('input_text', inputText);
-        console.log(formData)
-        fetch('/mdproject/save/', {
-            method: 'POST',
-            headers: {'X-CSRFToken': csrftoken},
-            mode: 'same-origin',
-            body: formData,
-        })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('decrypted_text').innerText = 'Texto criptografado: ' + data;
-        })
-        .catch(error => console.error('Erro:', error));
-    });
-</script>
 </html>
