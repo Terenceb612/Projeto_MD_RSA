@@ -52,7 +52,7 @@ def load_menu_library():
     lib.gerarChavePub.restype = ctypes.c_int
     lib.encriptarMenu.argtypes = [ctypes.c_char_p, ctypes.c_longlong, ctypes.c_longlong]
     lib.encriptarMenu.restype = ctypes.c_int
-    lib.desencriptarMenu.argtypes = [ctypes.c_longlong, ctypes.c_longlong, ctypes.c_int]
+    lib.desencriptarMenu.argtypes = [ctypes.c_longlong, ctypes.c_longlong, ctypes.c_longlong] 
     lib.desencriptarMenu.restype = ctypes.c_int
     return lib
 

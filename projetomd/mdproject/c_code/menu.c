@@ -78,6 +78,7 @@ passo 4:  1 % 2 = 1  → inclui base^8    1  / 2 = 0 → para
 
 resultado : base^1 × base^4 × base^8 = base^13
 */
+//  to usando o int128 pra nao dar overflow caso seja maior que o tolerado por long long
 long long mod_pow(long long base, long long exponent, long long modulus)
 {
     long long resultado = 1; 
@@ -87,10 +88,10 @@ long long mod_pow(long long base, long long exponent, long long modulus)
     {
         if (exponent %2 == 1)
         {
-            resultado = resultado * base % modulus; //nao pode abreviar o operador de multiplicacao, testei e deu erro essa bomba
+            resultado =(__int128)resultado * base % modulus; //nao pode abreviar o operador de multiplicacao, testei e deu erro essa bomba
         }
         exponent /=2;
-        base = base * base % modulus; 
+        base = (__int128)base * base % modulus; 
         
     }
     return resultado;
@@ -98,16 +99,17 @@ long long mod_pow(long long base, long long exponent, long long modulus)
 
 //cauet: função tot_euler feita, mas precisa ser revisada.
 //Função necessária para calcular a chave pública e privada.
+// terence: corrigido - tava dando overflow pra primos grandes (tipo 3bi+), mesma maracutaia do mod_pow
 long long tot_euler(long long primo1, long long primo2) // tava chamando n sem usar ele.
 {
-    long long res = (primo1 - 1) * (primo2 - 1);
-    
+    long long res = ((__int128)(primo1 - 1)) * (primo2 - 1); // <- sem o cast aqui o resultado fica errado silenciosamente
+
     return res;
 }
 
 //Função encontrarD implementada juntamente com o euclides estendido.
 //A função encontrarD usa o euclides estendido para calcular o valor d, pois d é o inverso multiplicativo de 
-long long euclidesEstendido(long long a, long long b, long long *s, long long *t) // tem que ser long long, corrigido
+long long euclidesEstendido(long long a, long long b, long long *s, long long *t)
 {
     if (a == 0) 
     {
@@ -116,10 +118,10 @@ long long euclidesEstendido(long long a, long long b, long long *s, long long *t
         return b;
     }
     
-    long long s1, t1; 
-    long long resultado = euclidesEstendido(b % a, a, &s1, &t1); // corrigido, antes tava chamando "euclides" e tem que ser "resultado", "mdc" vai conflitar
-    
-    *s = t1 - (b / a) * s1;
+    long long s1, t1; // corrigido - o __int128 aqui tava causando ub, passava __int128* como long long* e corrompindo tudo
+    long long resultado = euclidesEstendido(b % a, a, &s1, &t1);
+
+    *s = (long long)(t1 - (__int128)(b / a) * s1); //quick fix 128int pra nao dar overflow no meio do calculo, igual tava no TESTE1.C
     *t = s1;
     
     return resultado;
@@ -293,31 +295,40 @@ int encriptarMenu(char* mensagem, long long n, long long e)
     return 0;
 }
 
-//REVISAR, ACHO QUE TEM PROBLEMA AQUI 
+// terence: tinha problema aqui sim - buffer de 10000 chars truncava mensagens longas
+// cada char encriptado vira um numero de ate 19 digitos no arquivo, entao ~500 chars ja estourava
+// corrigido: agora pega o tamanho real do arquivo e le tudo de uma vez
 int desencriptarMenu(long long p, long long q, long long int e)
 {
     long long mensagemenc[100000], D, tamanho;
-    char mensagem[10000];
-    char linha[10000];
+    char mensagem[100000]; // <- aumentei pra bater com o tamanho de mensagemenc
     int i = 0;
 
     FILE *file;
     file = fopen("textEncript.txt", "r");
-    
 
     if (file == NULL) {
         perror("Erro ao abrir o arquivo");
         return 1;
     }
 
-    fgets(mensagem, sizeof(mensagem), file);
-    if (mensagem[strlen(mensagem) - 1] == '\n'){
-        mensagem[strlen(mensagem) - 1] = '\0';
+    // descobre o tamanho real do arquivo pra alocar certo
+    fseek(file, 0, SEEK_END);
+    long tamArquivo = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    char *bufArquivo = malloc(tamArquivo + 1); // +1 pro \0
+    if (bufArquivo == NULL) {
+        fclose(file);
+        return 1;
     }
 
+    fread(bufArquivo, 1, tamArquivo, file);
+    bufArquivo[tamArquivo] = '\0';
     fclose(file);
 
-    converterParaLongLong(mensagem, mensagemenc, &tamanho);
+    converterParaLongLong(bufArquivo, mensagemenc, &tamanho);
+    free(bufArquivo);
     
     long long n = p * q;
 
