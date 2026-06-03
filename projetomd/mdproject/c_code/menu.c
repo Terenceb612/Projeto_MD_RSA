@@ -217,11 +217,43 @@ void convertascii(char mensagem[], long long mensagemencriptada[], int tamanho)
     }
 }
 
-//FALTA IMPLEMENTAR fif, e essa funcao nao é eficiente, vamos usar euclides estendido para os primos
+//Função encontrarD implementada juntamente com o euclides estendido.
+//A função encontrarD usa o euclides estendido para calcular o valor d, pois d é o inverso multiplicativo de 
+int euclidesEstendido(int a, int b, int *s, int *t) 
+{
+    if (a == 0) 
+    {
+        *s = 0;
+        *t = 1;
+        return b;
+    }
+
+    int s1, t1; 
+    int mdc = euclides(b % a, a, &s1, &t1);
+
+    *s = t1 - (b / a) * s1;
+    *t = s1;
+
+    return mdc;
+}
 
 long long encotrarD(long long e, long long p, long long q)
 {
-    //Implementar função para encontrar o valor de D
+    long long n = p * q;
+    long long tot = tot_euler(p,q,n);
+
+    long long j, k;
+
+    int mdc = euclidesEstendido(e,tot,&j,&k);
+
+    if (mdc != 1) // Caso tenha algum erro (primos inválidos, expoente errado, etc)
+    {
+        printf("Erro: mdc != 1, não existe d!");
+        return -1;
+    }
+    long long d = j % tot;
+    if (d < 0)  d += tot; // <- Para a chave privada nunca ser negativa.
+    return d;
 }
 
 
