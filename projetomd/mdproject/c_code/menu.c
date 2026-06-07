@@ -19,11 +19,10 @@ int desencriptarMenu(long long p, long long q, long long e);
 
 
 /*terence:
-Se n tem um divisor, ele sempre vem em par: n = a * b.
-Se a > √n, então obrigatoriamente b < √n — o menor sempre fica abaixo da raiz.
-Logo, se nenhum número até √n divide n, não existe divisor — n é primo.
-Usar i*i <= n evita importar math.h e é equivalente a i <= √n.
-int primo(int n)
+Se n tem um divisor, ele sempre vem em par: n = a * b
+Se a > raiz de n, então obrigatoriamente b < raiz de n, o menor sempre fica abaixo da raiz
+Logo, se nenhum número até √n divide n, não existe divisor — n é primo
+Usar i*i <= n evita importar math.h e é equivalente a i <= raiz de n
 */
 int primo(long long n)
 {
