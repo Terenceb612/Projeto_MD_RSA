@@ -1,0 +1,397 @@
+body {
+    background-image: url('background/binary-code.gif');
+    background-size: cover;
+    background-position: center;
+    background-color: rgb(255, 255, 255);
+}
+.div1 {
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 50vw;
+    height: 100vh;
+}
+h1 {
+    color: azure;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 180px;
+    font-family: "Zen Dots", sans-serif;
+}
+
+h2 {
+    color: azure;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-family: "Zen Dots", sans-serif;
+}
+
+.salvar{
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 70px;
+    font-size: 30px;
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    border: none;
+
+    position: absolute;
+    top: 160px;  
+    right: 100px; 
+}
+.criptografar{
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 70px;
+    font-size: 30px;
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    border: none;
+
+    position: absolute;
+    top: 460px;  
+    right: 100px; 
+}
+.descriptografar{
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 70px;
+    font-size: 30px;
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    border: none;
+
+    position: absolute;
+    top: 760px;  
+    right: 100px; 
+}
+
+button:hover{
+    transform: scale(1.2);
+}
+
+button:active{
+    transform: scale(0.9);
+    background: rgb(156, 240, 255);
+}
+
+button{
+    transition: all 0.2s;
+} 
+
+.divsave {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100vh;
+}
+
+.chavep{
+    background-color: rgb(31, 100, 165);
+    width: 700px;
+    height: 700px;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 100px;  
+    right: 600px;
+}
+.title{
+    background-color: rgb(114, 183, 223);
+    border-radius: 40px;
+    padding: 40px;
+    font-family: Verdana, sans-serif;
+    position: fixed;
+    text-align: center;
+    top: 150px;
+}
+.primo1{
+    appearance: none;
+    color: azure;
+    font-family: Verdana, sans-serif;
+    position: fixed;
+    text-align: center;
+    top: 300px;
+}
+.primo1 input{
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #222222;
+    background-color: #f9f9f9;
+    border: 2px solid #e0e0e0; 
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+.p1{
+    font-family: Verdana, sans-serif;
+    font-size: 25px;
+}
+.primo2{
+    appearance: none;
+    color: azure;
+    font-family: Verdana, sans-serif;
+    position: fixed;
+    text-align: center;
+    top: 450px;
+}
+.primo2 input{
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #222222;
+    background-color: #f9f9f9;
+    border: 2px solid #e0e0e0; 
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+.p2{
+    font-family: Verdana, sans-serif;
+    font-size: 25px;
+}
+.e{
+    appearance: none;
+    color: azure;
+    font-family: Verdana, sans-serif;
+    position: fixed;
+    text-align: center;
+    top: 600px;
+}
+.e input{
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #222222;
+    background-color: #f9f9f9;
+    border: 2px solid #e0e0e0; 
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+.numeroe{
+    font-family: Verdana, sans-serif;
+    font-size: 25px;
+}
+.botaosalvar{
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    border: none;
+
+    position: absolute;
+    top: 700px;  
+    right: 960px;
+}
+.botaovoltar{
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    border: none;
+
+    position: absolute;
+    top: 740px;  
+    right: 760px;
+}
+.mensagem{
+    appearance: none;
+    color: azure;
+    font-family: Verdana, sans-serif;
+    position: fixed;
+    text-align: center;
+    top: 300px;
+}
+.mensagem input{
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #222222;
+    background-color: #f9f9f9;
+    border: 2px solid #e0e0e0; 
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+.mss{
+    font-family: Verdana, sans-serif;
+    font-size: 25px;
+}
+.chaven{
+    appearance: none;
+    color: azure;
+    font-family: Verdana, sans-serif;
+    position: fixed;
+    text-align: center;
+    top: 450px;
+}
+.chaven input{
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #222222;
+    background-color: #f9f9f9;
+    border: 2px solid #e0e0e0; 
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+.cn{
+    font-family: Verdana, sans-serif;
+    font-size: 25px;
+}
+.chavee{
+    appearance: none;
+    color: azure;
+    font-family: Verdana, sans-serif;
+    position: fixed;
+    text-align: center;
+    top: 600px;
+}
+.chavee input{
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #222222;
+    background-color: #f9f9f9;
+    border: 2px solid #e0e0e0; 
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+.ce{
+    font-family: Verdana, sans-serif;
+    font-size: 25px;
+}
+.botaocrypt{
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    border: none;
+
+    position: absolute;
+    top: 700px;  
+    right: 990px;
+}
+.numerop{
+    appearance: none;
+    color: azure;
+    font-family: Verdana, sans-serif;
+    position: fixed;
+    text-align: center;
+    top: 300px;
+}
+.numerop input{
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #222222;
+    background-color: #f9f9f9;
+    border: 2px solid #e0e0e0; 
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+.np{
+    font-family: Verdana, sans-serif;
+    font-size: 25px;
+}
+.numeroq{
+    appearance: none;
+    color: azure;
+    font-family: Verdana, sans-serif;
+    position: fixed;
+    text-align: center;
+    top: 450px;
+}
+.numeroq input{
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #222222;
+    background-color: #f9f9f9;
+    border: 2px solid #e0e0e0; 
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+.nq{
+    font-family: Verdana, sans-serif;
+    font-size: 25px;
+}
+.botaodecrypt{
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    border: none;
+
+    position: absolute;
+    top: 700px;  
+    right: 960px;
+}
+.botaovoltarfinal{
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    font-weight: bold;
+    border: none;
+
+    position: absolute;
+    top: 700px;  
+    right: 865px;
+}
+.show{
+    border: 1px solid black;
+}
