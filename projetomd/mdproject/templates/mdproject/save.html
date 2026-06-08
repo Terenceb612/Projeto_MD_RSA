@@ -2,28 +2,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Resultado</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Zen+Dots">
+    <title>Chave Pública</title>
 </head>
 <body>
-    <div class="pag">
+    <div>
         <form method="POST" action="{% url 'mdproject:save' %}">
-            {% csrf_token %}
-            <label>Primo 1:</label>
-            <input type="text" id="primo1" name="primo1">
-
-            <label>Primo 2:</label>
-            <input type="text" id="primo2" name="primo2">
-
-            <label>E:</label>
-            <input type="text" id="e" name="e">
-            <button type="submit">Salvar</button>
+            <div class="divsave">
+                {% csrf_token %}
+                <div class="chavep">
+                    <h2 class="title"> Vamos salvar sua chave pública! </h2>
+                </div>
+                <div class="primo1">
+                    <h2 class="p1"> Primo 1 </h2>
+                    <input type="text" id="primo1" name="primo1">
+                </div>
+                <div class="primo2">
+                    <h2 class="p2"> Primo 2 </h2>
+                    <input type="text" id="primo2" name="primo2">
+                </div>
+                <div class="e">
+                    <h2 class="numeroe"> Numero E </h2>
+                    <input type="text" id="e" name="e">
+                </div>
+                <button class="botaosalvar"> Salvar Chave </button>
+            </div>
         </form>
 
         {% if status %}
             <label>{{ status }}</label>
         {% endif %}
-        <a href="{% url 'mdproject:index' %}">Voltar ao menu inicial</a>
+        <a href="index.html">
+            <button class="botaovoltar"> Menu Inicial </button>
+        </a>
     </div>
 </body>
 </html>
