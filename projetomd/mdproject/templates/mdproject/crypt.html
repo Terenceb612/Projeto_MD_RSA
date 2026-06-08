@@ -2,29 +2,41 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>
-            Resultado
-        </title>
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Zen+Dots">
+        <title>Encriptação</title>
     </head>
     <body>
         <div class="pag">
             <form id="encrypt-form" method="POST" action="{% url 'mdproject:crypt' %}">
-                {% csrf_token %}
-                <label>Texto a ser criptografado:</label>
-                <input type="text" id="mensagem" name="mensagem">
-
-                <label>Chave pública (n):</label>
-                <input type="text" id="n" name="n">
-
-                <label>Chave pública (e):</label>
-                <input type="text" id="e" name="e">
-                {% if status %}
-                    <label>{{ status }}</label>
-                {% endif %}
-                <button type="submit">Criptografar</button>
+                <div class="divsave">
+                    {% csrf_token %}
+                    <div class="chavep">
+                        <h2 class="title"> Vamos encriptar sua mensagem! </h2>
+                    </div>
+                    <div class="mensagem">
+                        <h2 class="mss"> Digite sua mensagem: </h2>
+                        <input type="text" id="mensagem" name="mensagem">
+                    </div>
+                    <div class="chaven">
+                        <h2 class="cn"> Chave pública (n) </h2>
+                        <input type="text" id="chaven" name="chaven">
+                    </div>
+                    <div class="chavee">
+                        <h2 class="ce"> Chave pública (e) </h2>
+                        <input type="text" id="chavee" name="chavee">
+                    </div>
+                    {% if status %}
+                        <label>{{ status }}</label>
+                    {% endif %}
+                    <button class="botaocrypt" type="submit"> Encriptar </button>
+                </div>
             </form>
-            <a href="{% url 'mdproject:index' %}">Voltar ao menu inicial</a>
+            <a href="index.html">
+                <button class="botaovoltar"> Menu Inicial </button>
+            </a>
         </div>
     </body>
 </html>
