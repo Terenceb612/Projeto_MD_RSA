@@ -7,7 +7,28 @@
     <title>Resultado — RSA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg: #0f0f0f;
+            --surface: #1a1a1a;
+            --border: #2a2a2a;
+            --text-primary: #e8e8e8;
+            --text-secondary: #888;
+            --accent: #3b82f6;
+            --radius: 10px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text-primary); font-size: 15px; line-height: 1.6; min-height: 100vh; }
+        .page { max-width: 640px; margin: 0 auto; padding: 48px 24px 80px; }
+        .page-header { margin-bottom: 40px; text-align: center; }
+        .page-header h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 16px; box-shadow: var(--shadow); }
+        .result-label { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px; display: block; }
+        .result-box { background: #111; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; word-break: break-all; line-height: 1.7; color: var(--text-primary); }
+        .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); text-decoration: none; font-size: 13px; font-weight: 500; margin-top: 24px; transition: color 0.15s; }
+        .back-link:hover { color: var(--text-primary); }
+    </style>
 </head>
 <body>
     <div class="page">
