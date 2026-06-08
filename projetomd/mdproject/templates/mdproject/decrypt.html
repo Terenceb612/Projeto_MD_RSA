@@ -6,82 +6,219 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descriptografar — RSA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
-            --bg: #0f0f0f;
-            --surface: #1a1a1a;
-            --border: #2a2a2a;
-            --text-primary: #e8e8e8;
-            --text-secondary: #888;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --accent-light: rgba(59,130,246,0.12);
-            --radius: 10px;
-            --shadow: 0 1px 3px rgba(0,0,0,0.4);
+            --bg: #000000; --surface: rgba(6,12,6,0.80);
+            --border: rgba(68,214,44,0.13); --border-hover: rgba(68,214,44,0.40);
+            --text-primary: #c8f0c0; --text-secondary: #6aaa5a;
+            --accent: #44d62c; --accent-dim: rgba(68,214,44,0.08); --accent-hover: rgba(68,214,44,0.14);
+            --success: #44d62c; --radius: 12px; --mono: 'JetBrains Mono', monospace;
         }
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text-primary); font-size: 15px; line-height: 1.6; min-height: 100vh; }
-        .page { max-width: 640px; margin: 0 auto; padding: 48px 24px 80px; }
-        .page-header { margin-bottom: 40px; text-align: center; }
-        .page-header h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
-        .page-header p { color: var(--text-secondary); font-size: 14px; }
-        .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 16px; box-shadow: var(--shadow); }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg); color: var(--text-primary); font-size: 16px; line-height: 1.6; min-height: 100vh;
+            color-scheme: dark;
+            background-image: linear-gradient(rgba(68,214,44,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(68,214,44,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .page { max-width: 960px; margin: 0 auto; padding: 56px 24px 80px; }
+        .page-header { margin-bottom: 36px; text-align: center; animation: fadeUp 0.45s ease-out both; }
+        .page-header .label { font-family: var(--mono); font-size: 13px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; opacity: 0.75; }
+        .page-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.4px; color: #e0f5d8; }
+
+        .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+        @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+
+        .card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 28px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            transition: border-color 0.2s; animation: fadeUp 0.5s ease-out both;
+        }
+        .split > .card:nth-child(1) { animation-delay: 0.10s; }
+        .split > .card:nth-child(2) { animation-delay: 0.20s; }
+        .card:hover { border-color: var(--border-hover); }
+        .card-title { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 20px; }
+
         .field { margin-bottom: 18px; }
-        .field label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--text-primary); }
-        .field input[type="text"] { width: 100%; padding: 9px 13px; border: 1px solid var(--border); border-radius: 7px; font-family: inherit; font-size: 14px; background: #111; color: var(--text-primary); transition: border-color 0.15s, box-shadow 0.15s; outline: none; }
-        .field input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
-        .field input::placeholder { color: #555; }
-        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 9px 20px; border-radius: 7px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.15s; border: none; }
-        .btn-primary { background: var(--accent); color: #fff; }
-        .btn-primary:hover { background: var(--accent-hover); }
-        .form-actions { margin-top: 20px; }
-        .status { padding: 10px 14px; border-radius: 7px; font-size: 13px; margin-top: 14px; background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
-        .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
-        .result-label { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px; display: block; }
-        .result-box { background: #111; border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; word-break: break-all; line-height: 1.7; color: var(--text-primary); }
-        .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); text-decoration: none; font-size: 13px; font-weight: 500; margin-top: 24px; transition: color 0.15s; }
-        .back-link:hover { color: var(--text-primary); }
+        .field label { display: block; font-family: var(--mono); font-size: 13px; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 7px; }
+        .field input[type="text"] {
+            width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px;
+            font-family: var(--mono); font-size: 14px; background: rgba(4,10,4,0.90);
+            color: var(--text-primary); outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+            -webkit-text-fill-color: var(--text-primary); caret-color: var(--accent);
+        }
+        .field input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(68,214,44,0.10); }
+        .field input::placeholder { color: var(--text-secondary); opacity: 0.45; }
+        .field input:-webkit-autofill,
+        .field input:-webkit-autofill:hover,
+        .field input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 1000px #040a04 inset !important;
+            -webkit-text-fill-color: var(--text-primary) !important;
+            caret-color: var(--accent);
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 10px 22px; border-radius: 8px; font-family: var(--mono); font-size: 13px;
+            font-weight: 500; letter-spacing: 0.5px; cursor: pointer;
+            transition: background 0.15s, transform 0.1s; border: none;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { background: #5aed42; }
+        .form-actions { margin-top: 22px; }
+
+        .status {
+            padding: 10px 14px; border-radius: 8px; font-family: var(--mono); font-size: 13px; margin-top: 14px;
+            background: rgba(68,214,44,0.08); color: var(--success); border: 1px solid rgba(68,214,44,0.2);
+        }
+
+        .divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+        .result-label { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; display: block; }
+        .result-box {
+            background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 8px;
+            padding: 14px 16px; font-family: var(--mono); font-size: 14px;
+            word-break: break-all; line-height: 1.7; color: var(--accent);
+        }
+
+        .math-row { margin-bottom: 20px; }
+        .math-label { font-family: var(--mono); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 4px; }
+        .math-value { font-family: var(--mono); font-size: 15px; color: var(--accent); word-break: break-all; min-height: 22px; }
+        .math-value.invalid { color: #ff5e6c; }
+        .math-verify { font-family: var(--mono); font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary);
+            text-decoration: none; font-family: var(--mono); font-size: 12px; margin-top: 28px;
+            transition: color 0.15s; animation: fadeUp 0.5s ease-out both; animation-delay: 0.30s;
+        }
+        .back-link:hover { color: var(--accent); }
     </style>
 </head>
 <body>
     <div class="page">
         <div class="page-header">
+            <div class="label">// decifrar_mensagem()</div>
             <h1>Descriptografar</h1>
-            <p>Informe os primos e o expoente para gerar a chave privada</p>
         </div>
 
-        <div class="card">
-            <form id="descrypt-form" method="POST" action="{% url 'mdproject:descrypt' %}">
-                {% csrf_token %}
-                <div class="field">
-                    <label for="p">Primo p</label>
-                    <input type="text" id="p" name="p" placeholder="Valor de p">
-                </div>
-                <div class="field">
-                    <label for="q">Primo q</label>
-                    <input type="text" id="q" name="q" placeholder="Valor de q">
-                </div>
-                <div class="field">
-                    <label for="e">Expoente e</label>
-                    <input type="text" id="e" name="e" placeholder="Valor de e">
-                </div>
-                {% if status %}
-                    <div class="status">{{ status }}</div>
+        <div class="split">
+            <div class="card">
+                <p class="card-title">// entrada</p>
+                <form id="descrypt-form" method="POST" action="{% url 'mdproject:descrypt' %}">
+                    {% csrf_token %}
+                    <div class="field">
+                        <label>primo_p</label>
+                        <input type="text" id="p" name="p" placeholder="valor de p">
+                    </div>
+                    <div class="field">
+                        <label>primo_q</label>
+                        <input type="text" id="q" name="q" placeholder="valor de q">
+                    </div>
+                    <div class="field">
+                        <label>expoente_e</label>
+                        <input type="text" id="e" name="e" placeholder="valor de e">
+                    </div>
+                    {% if status %}
+                        <div class="status">{{ status }}</div>
+                    {% endif %}
+                    <div class="form-actions">
+                        <button class="btn btn-primary" type="submit">Descriptografar</button>
+                    </div>
+                </form>
+
+                {% if decrypted_text %}
+                    <hr class="divider">
+                    <span class="result-label">mensagem_decifrada</span>
+                    <div class="result-box">{{ decrypted_text }}</div>
                 {% endif %}
-                <div class="form-actions">
-                    <button class="btn btn-primary" type="submit">Descriptografar</button>
-                </div>
-            </form>
+            </div>
 
-            {% if decrypted_text %}
-                <hr class="divider">
-                <span class="result-label">Mensagem descriptografada</span>
-                <div class="result-box">{{ decrypted_text }}</div>
-            {% endif %}
+            <div class="card">
+                <p class="card-title">// rsa_math</p>
+
+                <div class="math-row">
+                    <div class="math-label">n = p × q</div>
+                    <div class="math-value" id="val-n">—</div>
+                </div>
+                <div class="math-row">
+                    <div class="math-label">φ(n) = (p−1)(q−1)</div>
+                    <div class="math-value" id="val-phi">—</div>
+                </div>
+                <div class="math-row">
+                    <div class="math-label">d = e⁻¹ mod φ(n)</div>
+                    <div class="math-value" id="val-d">—</div>
+                </div>
+                <div class="math-row">
+                    <div class="math-label">verificação: (e × d) mod φ(n)</div>
+                    <div class="math-value" id="val-verify">—</div>
+                    <div class="math-verify" id="val-verify-msg"></div>
+                </div>
+            </div>
         </div>
 
-        <a class="back-link" href="{% url 'mdproject:index' %}">← Voltar ao início</a>
+        <a class="back-link" href="{% url 'mdproject:index' %}">← voltar ao início</a>
     </div>
+
+    <script>
+        function modInverse(e, phi) {
+            let [old_r, r] = [e, phi];
+            let [old_s, s] = [1, 0];
+            while (r !== 0) {
+                const q = Math.floor(old_r / r);
+                [old_r, r] = [r, old_r - q * r];
+                [old_s, s] = [s, old_s - q * s];
+            }
+            return ((old_s % phi) + phi) % phi;
+        }
+
+        function update() {
+            const p = parseInt(document.getElementById('p').value);
+            const q = parseInt(document.getElementById('q').value);
+            const e = parseInt(document.getElementById('e').value);
+            const nEl = document.getElementById('val-n');
+            const phiEl = document.getElementById('val-phi');
+            const dEl = document.getElementById('val-d');
+            const verEl = document.getElementById('val-verify');
+            const verMsg = document.getElementById('val-verify-msg');
+
+            if (!isNaN(p) && !isNaN(q) && p > 1 && q > 1) {
+                const n = p * q;
+                const phi = (p - 1) * (q - 1);
+                nEl.textContent = n;
+                phiEl.textContent = phi;
+                if (!isNaN(e) && e > 1) {
+                    const d = modInverse(e, phi);
+                    dEl.textContent = d;
+                    const check = (e * d) % phi;
+                    verEl.textContent = check;
+                    if (check === 1) {
+                        verEl.className = 'math-value';
+                        verMsg.textContent = '✓ chave privada válida';
+                    } else {
+                        verEl.className = 'math-value invalid';
+                        verMsg.textContent = '✗ e e φ(n) não são coprimos';
+                    }
+                } else {
+                    dEl.textContent = '—'; verEl.textContent = '—';
+                    verEl.className = 'math-value'; verMsg.textContent = '';
+                }
+            } else {
+                nEl.textContent = '—'; phiEl.textContent = '—';
+                dEl.textContent = '—'; verEl.textContent = '—';
+                verEl.className = 'math-value'; verMsg.textContent = '';
+            }
+        }
+
+        document.getElementById('p').addEventListener('input', update);
+        document.getElementById('q').addEventListener('input', update);
+        document.getElementById('e').addEventListener('input', update);
+    </script>
 </body>
 </html>
