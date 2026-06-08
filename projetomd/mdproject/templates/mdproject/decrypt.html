@@ -2,27 +2,37 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>
-            Resultado
-        </title>
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Zen+Dots">
+        <title>Chave Pública</title>
     </head>
     <body>
         <div class="pag">
             <form id="descrypt-form" method="POST" action="{% url 'mdproject:descrypt' %}">
-                {% csrf_token %}
-                <label>Digite o p:</label>
-                <input type="text" id="p" name="p">
-
-                <label>Digite o q:</label>
-                <input type="text" id="q" name="q">
-
-                <label>Digite o e:</label>
-                <input type="text" id="e" name="e">
-                {% if status %}
-                    <label>{{ status }}</label>
-                {% endif %}
-                <button type="submit">Descriptografar</button>
+                <div class="divsave">
+                    {% csrf_token %}
+                    <div class="chavep">
+                        <h2 class="title"> Vamos desencriptar sua mensagem! </h2>
+                    </div>
+                    <div class="numerop">
+                        <h2 class="np"> Numero P </h2>
+                        <input type="text" id="np" name="np">
+                    </div>
+                    <div class="numeroq">
+                        <h2 class="nq"> Numero Q </h2>
+                        <input type="text" id="nq" name="nq">
+                    </div>
+                    <div class="e">
+                        <h2 class="numeroe"> Numero E </h2>
+                        <input type="text" id="e" name="e">
+                    </div>
+                    {% if status %}
+                        <label>{{ status }}</label>
+                    {% endif %}
+                    <button class="botaodecrypt" type="submit"> Desencriptar </button>
+                </div>
             </form>
             {% if decrypted_text %}
                 <div class="show">
@@ -30,7 +40,9 @@
                     <label>{{ decrypted_text }}</label>
                 </div>
             {% endif %}
-            <a href="{% url 'mdproject:index' %}">Voltar ao menu inicial</a>
+            <a href="index.html">
+                <button class="botaovoltar"> Menu Inicial </button>
+            </a>
         </div>
     </body>
 </html>
