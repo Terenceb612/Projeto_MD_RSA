@@ -1,31 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Tela Inicial</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Zen+Dots">
+    <title>Página Inicial</title>
 </head>
 <body>
-    <h1>Projeto de Matemática Discreta: Criptografia</h1>
-    <h2>Enviar zip do aluno (menu.c)</h2>
-    <form method="POST" action="{% url 'mdproject:upload_c_zip' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="zip_file" accept=".zip">
-        <button type="submit">Enviar</button>
-    </form>
-    {% if upload_error %}
-        <p>{{ upload_error }}</p>
-    {% endif %}
-    {% if upload_success %}
-        <p>{{ upload_success }}</p>
-    {% endif %}
-
-    <label>Chave pública:</label>
-    <a href="{% url 'mdproject:save' %}">Salvar chave publica</a>
-
-    <label>Criptografar:</label>
-    <a href="{% url 'mdproject:crypt' %}">Cripto</a>
-
-    <label>Descriptografar:</label>
-    <a href="{% url 'mdproject:descrypt' %}">Descripto</a>
+    <div class="div1">
+        <div class="div2">
+            <h1>R S A</h1>
+            <h2>Projeto de Matemática Discreta: Criptografia</h2>
+            <a href="save.html">
+                <button class="salvar"> Salvar Chave Publica </button>
+            </a>
+            <a href="crypt.html">
+                <button class="criptografar"> Criptografar </button>
+            </a>
+            <a href="decrypt.html">
+                <button class="descriptografar"> Descriptografar </button>
+            </a>
+        </div>
+    </div>
 </body>
 
 <script>
