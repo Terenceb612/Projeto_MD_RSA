@@ -2,24 +2,33 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>
-            Resultado
-        </title>
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Zen+Dots">
+        <title>Resultado</title>
     </head>
     <body>
-        <div class="pag">
-            <div class="number">
-                <label>Primo 1:</label>
-                <label>Primo 2:</label>
-                <label>E:</label>
+        <div class="divsave">
+            <div class="chavep">
+                <h2 class="title"> Resultado </h2>
+            </div>
+            <div class="primo1">
+                <h2 class="p1"> Primo 1: </h2>
+            </div>
+            <div class="primo2">
+                <h2 class="p2"> Primo 2: </h2>
+            </div>
+            <div class="e">
+                <h2 class="numeroe"> Numero E: </h2>
             </div>
             <div class="show">
                 <label>Mensagem criptografada ou descriptografada:</label>
                 <label>{{ encrypted_text }}</label>
             </div>
-            
-            <a href="{% url 'mdproject:index' %}">Voltar ao menu inicial</a>
+            <a href="index.html">
+                <button class="botaovoltarfinal"> Menu Inicial </button>
+            </a>
         </div>
     </body>
 </html>
