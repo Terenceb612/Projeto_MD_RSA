@@ -1,36 +1,54 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>
-            Resultado
-        </title>
-        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    </head>
-    <body>
-        <div class="pag">
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descriptografar — RSA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="page">
+        <div class="page-header">
+            <h1>Descriptografar</h1>
+            <p>Informe os primos e o expoente para gerar a chave privada</p>
+        </div>
+
+        <div class="card">
             <form id="descrypt-form" method="POST" action="{% url 'mdproject:descrypt' %}">
                 {% csrf_token %}
-                <label>Digite o p:</label>
-                <input type="text" id="p" name="p">
-
-                <label>Digite o q:</label>
-                <input type="text" id="q" name="q">
-
-                <label>Digite o e:</label>
-                <input type="text" id="e" name="e">
-                {% if status %}
-                    <label>{{ status }}</label>
-                {% endif %}
-                <button type="submit">Descriptografar</button>
-            </form>
-            {% if decrypted_text %}
-                <div class="show">
-                    <label>Mensagem descriptografada:</label>
-                    <label>{{ decrypted_text }}</label>
+                <div class="field">
+                    <label for="p">Primo p</label>
+                    <input type="text" id="p" name="p" placeholder="Valor de p">
                 </div>
+                <div class="field">
+                    <label for="q">Primo q</label>
+                    <input type="text" id="q" name="q" placeholder="Valor de q">
+                </div>
+                <div class="field">
+                    <label for="e">Expoente e</label>
+                    <input type="text" id="e" name="e" placeholder="Valor de e">
+                </div>
+
+                {% if status %}
+                    <div class="status status-info">{{ status }}</div>
+                {% endif %}
+
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button class="btn btn-primary" type="submit">Descriptografar</button>
+                </div>
+            </form>
+
+            {% if decrypted_text %}
+                <hr class="divider">
+                <span class="result-label">Mensagem descriptografada</span>
+                <div class="result-box">{{ decrypted_text }}</div>
             {% endif %}
-            <a href="{% url 'mdproject:index' %}">Voltar ao menu inicial</a>
         </div>
-    </body>
+
+        <a class="back-link" href="{% url 'mdproject:index' %}">← Voltar ao início</a>
+    </div>
+</body>
 </html>

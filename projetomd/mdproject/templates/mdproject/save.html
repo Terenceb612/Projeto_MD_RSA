@@ -1,29 +1,48 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Resultado</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chave Pública — RSA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <div class="pag">
-        <form method="POST" action="{% url 'mdproject:save' %}">
-            {% csrf_token %}
-            <label>Primo 1:</label>
-            <input type="text" id="primo1" name="primo1">
+    <div class="page">
+        <div class="page-header">
+            <h1>Salvar chave pública</h1>
+            <p>Informe os primos e o expoente para gerar a chave</p>
+        </div>
 
-            <label>Primo 2:</label>
-            <input type="text" id="primo2" name="primo2">
+        <div class="card">
+            <form method="POST" action="{% url 'mdproject:save' %}">
+                {% csrf_token %}
+                <div class="field">
+                    <label for="primo1">Primo 1</label>
+                    <input type="text" id="primo1" name="primo1" placeholder="Valor do primeiro primo">
+                </div>
+                <div class="field">
+                    <label for="primo2">Primo 2</label>
+                    <input type="text" id="primo2" name="primo2" placeholder="Valor do segundo primo">
+                </div>
+                <div class="field">
+                    <label for="e">Expoente e</label>
+                    <input type="text" id="e" name="e" placeholder="Valor de e">
+                </div>
 
-            <label>E:</label>
-            <input type="text" id="e" name="e">
-            <button type="submit">Salvar</button>
-        </form>
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button class="btn btn-primary" type="submit">Salvar chave</button>
+                </div>
+            </form>
 
-        {% if status %}
-            <label>{{ status }}</label>
-        {% endif %}
-        <a href="{% url 'mdproject:index' %}">Voltar ao menu inicial</a>
+            {% if status %}
+                <div class="status status-success" style="margin-top: 16px;">{{ status }}</div>
+            {% endif %}
+        </div>
+
+        <a class="back-link" href="{% url 'mdproject:index' %}">← Voltar ao início</a>
     </div>
 </body>
 </html>
