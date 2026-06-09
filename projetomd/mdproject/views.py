@@ -48,11 +48,14 @@ def load_menu_library():
     library_name = 'menu.dll' if os.name == 'nt' else 'menu.so'
     library_path = BASE_DIR / 'c_code' / library_name
     lib = ctypes.CDLL(str(library_path))
-    lib.gerarChavePub.argtypes = [ctypes.c_longlong, ctypes.c_longlong, ctypes.c_longlong]
+    # Parametros como strings: GMP aceita numeros arbitrariamente grandes,
+    # mas ctypes nao conhece mpz_t. A interface usa const char* e o C
+    # converte internamente com mpz_set_str(..., 10).
+    lib.gerarChavePub.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
     lib.gerarChavePub.restype = ctypes.c_int
-    lib.encriptarMenu.argtypes = [ctypes.c_char_p, ctypes.c_longlong, ctypes.c_longlong]
+    lib.encriptarMenu.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
     lib.encriptarMenu.restype = ctypes.c_int
-    lib.desencriptarMenu.argtypes = [ctypes.c_longlong, ctypes.c_longlong, ctypes.c_longlong] 
+    lib.desencriptarMenu.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
     lib.desencriptarMenu.restype = ctypes.c_int
     return lib
 
@@ -176,19 +179,11 @@ def save(request):
             primo2 = request.POST.get('primo2', '')
             e = request.POST.get('e', '')
 
-            if primo1 and primo2 and e:  # Verifique se todos os campos foram preenchidos
+            if primo1 and primo2 and e:
                 random_lib = load_menu_library()
-
-                primo1 = int(primo1)
-                primo2 = int(primo2)
-                e = int(e)
-                
-                #string = ctypes.c_char_p(b"Text")
-                #pyGenKey = random_lib.gerarChavePub#(primo1, primo2, e)
-                #pyGenKey.argtypes = [ctypes.c_longlong, ctypes.c_longlong, ctypes.c_longlong]
-                #pyGenKey.restype = ctypes.c_int 
-                # Chame a função C para gerar as chaves públicas e verifique o status
-                status_code = random_lib.gerarChavePub(primo1, primo2, e)
+                status_code = random_lib.gerarChavePub(
+                    primo1.encode(), primo2.encode(), e.encode()
+                )
                 if status_code == 1:
                     status = 'Primo 1 inválido'
                 elif status_code == 2:
@@ -216,12 +211,9 @@ def crypt(request):
             e = request.POST.get('e', '')
             if n and e:
                 random_lib = load_menu_library()
-
-                n = int(n)
-                e = int(e)
-                
-                status = random_lib.encriptarMenu(mensagem.encode(), n, e)
-                #return HttpResponse(status)
+                status = random_lib.encriptarMenu(
+                    mensagem.encode(), n.encode(), e.encode()
+                )
                 if status == 0:
                     status = 'Mensagem criptografada com sucesso'
                 else:
@@ -244,11 +236,9 @@ def descrypt(request):
             e = request.POST.get('e', '')
             if p and q and e:
                 random_lib = load_menu_library()
-                
-                p = int(p)
-                q = int(q)
-                e = int(e)
-                status = random_lib.desencriptarMenu(p, q, e)
+                status = random_lib.desencriptarMenu(
+                    p.encode(), q.encode(), e.encode()
+                )
 
                 decrypted_text = ''
                 if status == 0 and DECRYPT_OUTPUT_FILE.exists():

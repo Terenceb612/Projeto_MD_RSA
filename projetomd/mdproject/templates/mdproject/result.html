@@ -31,26 +31,45 @@
         .page-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.4px; color: #e0f5d8; }
         .card {
             background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-            padding: 28px; margin-bottom: 16px; backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px); transition: border-color 0.2s;
-            animation: fadeUp 0.5s ease-out both; animation-delay: 0.12s;
+            padding: 28px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            transition: border-color 0.2s; animation: fadeUp 0.5s ease-out both; animation-delay: 0.12s;
         }
         .card:hover { border-color: var(--border-hover); }
-        .result-label { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 10px; display: block; }
+        .result-label { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 12px; display: block; }
         .result-box {
             background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 8px;
             padding: 16px 18px; font-family: var(--mono); font-size: 14px;
             word-break: break-all; line-height: 1.8; color: var(--accent);
         }
-        .back-link {
-            display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary);
-            text-decoration: none; font-family: var(--mono); font-size: 12px; margin-top: 28px;
-            transition: color 0.15s; animation: fadeUp 0.5s ease-out both; animation-delay: 0.24s;
+        .copy-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: var(--mono); font-size: 11px; letter-spacing: 1px;
+            color: var(--text-secondary); background: rgba(68,214,44,0.07);
+            border: 1px solid rgba(68,214,44,0.20); border-radius: 6px;
+            padding: 5px 12px; cursor: pointer; transition: color 0.15s, background 0.15s;
+            margin-top: 12px;
         }
-        .back-link:hover { color: var(--accent); }
+        .copy-btn:hover { color: var(--accent); background: rgba(68,214,44,0.13); }
+        .copy-btn.copied { color: var(--accent); border-color: rgba(68,214,44,0.4); }
+        /* toast + progress bar */
+        .s-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); z-index: 1001; width: 0; }
+        .s-toast {
+            position: fixed; bottom: 20px; right: 20px;
+            background: rgba(4,12,4,0.97); border: 1px solid rgba(68,214,44,0.28);
+            border-radius: 8px; padding: 9px 16px;
+            display: flex; align-items: center; gap: 8px;
+            font-family: var(--mono); font-size: 11px; color: var(--text-secondary);
+            animation: toastIn 0.18s ease both; z-index: 1000;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5); letter-spacing: 0.3px;
+        }
+        @keyframes toastIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+        .s-check { color: var(--accent); font-size: 13px; }
     </style>
 </head>
 <body>
+    <div class="s-bar" id="sBar"></div>
+    <div class="s-toast"><span class="s-check">✓</span> mensagem criptografada</div>
+
     <div class="page">
         <div class="page-header">
             <div class="label">// output</div>
@@ -58,9 +77,28 @@
         </div>
         <div class="card">
             <span class="result-label">texto_criptografado</span>
-            <div class="result-box">{{ encrypted_text }}</div>
+            <div class="result-box" id="resultText">{{ encrypted_text }}</div>
+            <button class="copy-btn" id="copyBtn" onclick="copyResult()">copiar resultado</button>
         </div>
-        <a class="back-link" href="{% url 'mdproject:index' %}">← voltar ao início</a>
     </div>
+
+    <script>
+        function copyResult() {
+            const text = document.getElementById('resultText').textContent.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = '✓ copiado';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = 'copiar resultado'; btn.classList.remove('copied'); }, 2000);
+            });
+        }
+
+        localStorage.setItem('rsa_done_crypt', '1');
+        const bar = document.getElementById('sBar');
+        const dur = 3000;
+        bar.style.transition = 'width ' + dur + 'ms linear';
+        requestAnimationFrame(() => bar.style.width = '100%');
+        setTimeout(() => { window.location.href = "{% url 'mdproject:index' %}"; }, dur + 80);
+    </script>
 </body>
 </html>

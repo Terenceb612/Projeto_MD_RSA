@@ -15,8 +15,10 @@ ENV/
 # Django / Python runtime artifacts
 *.sqlite3
 projetomd/mdproject/c_code/*.so
-projetomd/mdproject/c_code/*.dll
 projetomd/mdproject/c_code/*.dylib
+# textos gerados em runtime — nao versionar
+projetomd/textEncript.txt
+projetomd/textDencript.txt
 
 # OS / editor files
 .DS_Store

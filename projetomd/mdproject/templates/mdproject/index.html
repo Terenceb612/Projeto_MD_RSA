@@ -10,19 +10,11 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
-            --bg: #000000;
-            --surface: rgba(6,12,6,0.80);
-            --border: rgba(68,214,44,0.13);
-            --border-hover: rgba(68,214,44,0.40);
-            --text-primary: #c8f0c0;
-            --text-secondary: #6aaa5a;
-            --accent: #44d62c;
-            --accent-dim: rgba(68,214,44,0.08);
-            --accent-hover: rgba(68,214,44,0.14);
-            --danger: #ff5e6c;
-            --success: #44d62c;
-            --radius: 12px;
-            --mono: 'JetBrains Mono', monospace;
+            --bg: #000000; --surface: rgba(6,12,6,0.80);
+            --border: rgba(68,214,44,0.13); --border-hover: rgba(68,214,44,0.40);
+            --text-primary: #c8f0c0; --text-secondary: #6aaa5a;
+            --accent: #44d62c; --accent-dim: rgba(68,214,44,0.08); --accent-hover: rgba(68,214,44,0.14);
+            --danger: #ff5e6c; --success: #44d62c; --radius: 12px; --mono: 'JetBrains Mono', monospace;
         }
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(18px); }
@@ -30,82 +22,96 @@
         }
         body {
             font-family: 'Inter', system-ui, sans-serif;
-            background: var(--bg);
-            color: var(--text-primary);
-            font-size: 16px;
-            line-height: 1.6;
-            min-height: 100vh;
-            background-image:
-                linear-gradient(rgba(68,214,44,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(68,214,44,0.04) 1px, transparent 1px);
+            background: var(--bg); color: var(--text-primary);
+            font-size: 16px; line-height: 1.6; min-height: 100vh;
+            background-image: linear-gradient(rgba(68,214,44,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(68,214,44,0.04) 1px, transparent 1px);
             background-size: 40px 40px;
         }
         .page { max-width: 600px; margin: 0 auto; padding: 56px 24px 80px; }
-        .page-header {
-            margin-bottom: 44px; text-align: center;
-            animation: fadeUp 0.5s ease-out both;
-        }
-        .page-header .label {
-            font-family: var(--mono); font-size: 13px; letter-spacing: 2px;
-            color: var(--accent); text-transform: uppercase; margin-bottom: 10px; opacity: 0.75;
-        }
+        .page-header { margin-bottom: 44px; text-align: center; animation: fadeUp 0.5s ease-out both; }
+        .page-header .label { font-family: var(--mono); font-size: 13px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; opacity: 0.75; }
         .page-header h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.4px; color: #e0f5d8; }
+
         .card {
             background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
             padding: 28px; margin-bottom: 16px; backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px); transition: border-color 0.2s;
             animation: fadeUp 0.5s ease-out both;
         }
-        .card:nth-child(1) { animation-delay: 0.1s; }
-        .card:nth-child(2) { animation-delay: 0.2s; }
         .card:hover { border-color: var(--border-hover); }
-        .card-title {
-            font-family: var(--mono); font-size: 12px; letter-spacing: 2px;
-            text-transform: uppercase; color: var(--text-secondary); margin-bottom: 20px;
-        }
-        .field { margin-bottom: 18px; }
-        .field label {
-            display: block; font-family: var(--mono); font-size: 13px;
-            letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 7px;
-        }
-        .field input[type="file"] {
-            width: 100%; padding: 9px 13px; border: 1px solid var(--border); border-radius: 8px;
-            font-family: inherit; font-size: 14px; background: rgba(0,0,0,0.5); color: var(--text-secondary); outline: none;
-        }
-        .field input[type="file"]::file-selector-button {
-            background: rgba(68,214,44,0.08); color: var(--accent); border: 1px solid rgba(68,214,44,0.25);
-            border-radius: 6px; padding: 4px 12px; font-family: var(--mono); font-size: 12px;
-            font-weight: 500; cursor: pointer; margin-right: 10px; letter-spacing: 0.5px; transition: background 0.15s;
-        }
-        .field input[type="file"]::file-selector-button:hover { background: rgba(68,214,44,0.14); }
-        .field input[type="file"]::-webkit-file-upload-button {
-            background: rgba(68,214,44,0.08); color: var(--accent); border: 1px solid rgba(68,214,44,0.25);
-            border-radius: 6px; padding: 4px 12px; font-family: var(--mono); font-size: 12px;
-            font-weight: 500; cursor: pointer; margin-right: 10px;
-        }
-        .btn {
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: 10px 22px; border-radius: 8px; font-family: var(--mono); font-size: 13px;
-            font-weight: 500; letter-spacing: 0.5px; cursor: pointer;
-            transition: background 0.15s, transform 0.1s; border: none;
-        }
-        .btn:active { transform: scale(0.98); }
-        .btn-primary { background: var(--accent); color: #000; }
-        .btn-primary:hover { background: #5aed42; }
-        .btn-soft { background: rgba(68,214,44,0.10); color: #6aaa5a; border: 1px solid rgba(68,214,44,0.22); }
-        .btn-soft:hover { background: rgba(68,214,44,0.18); color: var(--accent); }
+        .card-title { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 20px; }
+
         .nav-links { display: flex; flex-direction: column; gap: 6px; }
         .nav-link {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 15px 18px; border: 1px solid var(--border); border-radius: 10px;
+            position: relative; display: flex; align-items: center; gap: 14px;
+            padding: 14px 18px; border: 1px solid var(--border); border-radius: 10px;
             text-decoration: none; color: var(--text-primary); font-size: 15px; font-weight: 500;
             background: var(--accent-dim); transition: border-color 0.2s, background 0.2s;
         }
         .nav-link:hover { border-color: var(--border-hover); background: var(--accent-hover); color: var(--accent); }
         .nav-link:hover .nav-arrow { transform: translateX(4px); }
-        .nav-link-left { display: flex; flex-direction: column; }
-        .nav-link-sub { font-family: var(--mono); font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-        .nav-arrow { color: var(--text-secondary); font-size: 16px; transition: transform 0.2s; }
+        .nav-link:first-child { border-color: rgba(68,214,44,0.20); background: rgba(68,214,44,0.07); }
+
+        .step-num { font-family: var(--mono); font-size: 11px; color: var(--accent); opacity: 0.4; letter-spacing: 1px; flex-shrink: 0; min-width: 20px; }
+        .nav-link:first-child .step-num { opacity: 0.75; }
+        .nav-link-left { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+        .nav-link-sub { font-family: var(--mono); font-size: 11px; color: var(--text-secondary); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .nav-arrow { color: var(--text-secondary); font-size: 16px; transition: transform 0.2s; flex-shrink: 0; margin-left: auto; }
+
+        .done-badge {
+            display: none; font-family: var(--mono); font-size: 10px; letter-spacing: 1px;
+            color: var(--accent); background: rgba(68,214,44,0.08);
+            border: 1px solid rgba(68,214,44,0.28); border-radius: 4px;
+            padding: 2px 7px; flex-shrink: 0;
+        }
+        .nav-link.is-done .done-badge { display: block; }
+        .nav-link.is-done { border-color: rgba(68,214,44,0.22); }
+
+        .nav-tip {
+            position: absolute; bottom: calc(100% + 10px); left: 0; right: 0;
+            background: rgba(2,8,2,0.97); border: 1px solid rgba(68,214,44,0.28);
+            border-radius: 8px; padding: 11px 15px;
+            font-size: 12px; font-family: var(--mono); color: var(--text-primary); line-height: 1.65;
+            font-weight: 400; letter-spacing: 0; text-transform: none;
+            opacity: 0; pointer-events: none; transition: opacity 0.15s ease; transition-delay: 0s;
+            z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+        }
+        .nav-tip::after { content: ''; position: absolute; top: 100%; left: 24px; border: 5px solid transparent; border-top-color: rgba(68,214,44,0.28); }
+        .nav-tip-title { color: var(--accent); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
+        .nav-link:hover .nav-tip { opacity: 1; transition-delay: 0.65s; }
+
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 22px; border-radius: 8px; font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: 0.5px; cursor: pointer; transition: background 0.15s, transform 0.1s; border: none; }
+        .btn:active { transform: scale(0.98); }
+        .btn-soft { background: rgba(68,214,44,0.10); color: #6aaa5a; border: 1px solid rgba(68,214,44,0.22); }
+        .btn-soft:hover { background: rgba(68,214,44,0.18); color: var(--accent); }
+
+        .btn-reset, .upload-toggle {
+            display: flex; align-items: center; gap: 7px;
+            font-family: var(--mono); font-size: 11px; letter-spacing: 0.8px;
+            color: var(--text-secondary); background: none;
+            border: 1px solid rgba(68,214,44,0.15); border-radius: 6px;
+            padding: 6px 14px; cursor: pointer;
+            transition: color 0.15s, border-color 0.15s, background 0.15s;
+            opacity: 0.6; width: 100%; user-select: none;
+        }
+        .btn-reset:hover, .upload-toggle:hover { color: var(--accent); border-color: rgba(68,214,44,0.35); background: rgba(68,214,44,0.06); opacity: 1; }
+        .btn-reset .reset-icon { font-size: 13px; transition: transform 0.4s ease; }
+        .btn-reset:hover .reset-icon { transform: rotate(-180deg); }
+        .btn-reset.cleared { color: var(--accent); border-color: rgba(68,214,44,0.4); opacity: 1; }
+        .upload-toggle .arrow { transition: transform 0.2s; display: inline-block; font-size: 13px; }
+        .upload-toggle.open .arrow { transform: rotate(90deg); }
+
+        .upload-section { margin-top: 8px; animation: fadeUp 0.5s ease-out both; animation-delay: 0.3s; }
+        .upload-divider { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+        .upload-divider::before, .upload-divider::after { content: ''; flex: 1; height: 1px; background: rgba(68,214,44,0.08); }
+        .upload-divider-label { font-family: var(--mono); font-size: 10px; color: var(--text-secondary); opacity: 0.35; letter-spacing: 1px; white-space: nowrap; }
+        .upload-body { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; border: 1px solid transparent; border-radius: var(--radius); margin-top: 0; }
+        .upload-body.open { max-height: 360px; margin-top: 10px; border-color: var(--border); background: var(--surface); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 20px 22px; }
+        .field input[type="file"] { width: 100%; padding: 9px 13px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 14px; background: rgba(0,0,0,0.5); color: var(--text-secondary); outline: none; }
+        .field input[type="file"]::file-selector-button { background: rgba(68,214,44,0.08); color: var(--accent); border: 1px solid rgba(68,214,44,0.25); border-radius: 6px; padding: 4px 12px; font-family: var(--mono); font-size: 12px; font-weight: 500; cursor: pointer; margin-right: 10px; letter-spacing: 0.5px; transition: background 0.15s; }
+        .field input[type="file"]::file-selector-button:hover { background: rgba(68,214,44,0.14); }
+        .field input[type="file"]::-webkit-file-upload-button { background: rgba(68,214,44,0.08); color: var(--accent); border: 1px solid rgba(68,214,44,0.25); border-radius: 6px; padding: 4px 12px; font-family: var(--mono); font-size: 12px; font-weight: 500; cursor: pointer; margin-right: 10px; }
+        .field { margin-bottom: 12px; }
         .status { padding: 10px 14px; border-radius: 8px; font-family: var(--mono); font-size: 13px; margin-top: 14px; }
         .status-error { background: rgba(255,94,108,0.08); color: var(--danger); border: 1px solid rgba(255,94,108,0.2); }
         .status-success { background: rgba(68,214,44,0.08); color: var(--success); border: 1px solid rgba(68,214,44,0.2); }
@@ -117,49 +123,115 @@
             <div class="label">// rsa_cipher.c</div>
             <h1>Criptografia RSA</h1>
         </div>
-        <div class="card">
-            <p class="card-title">// upload</p>
-            <form method="POST" action="{% url 'mdproject:upload_c_zip' %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="field">
-                    <label>arquivo_aluno.zip</label>
-                    <input type="file" name="zip_file" accept=".zip">
-                </div>
-                <button class="btn btn-soft" type="submit">Enviar ZIP</button>
-            </form>
-            {% if upload_error %}
-                <div class="status status-error">{{ upload_error }}</div>
-            {% endif %}
-            {% if upload_success %}
-                <div class="status status-success">{{ upload_success }}</div>
-            {% endif %}
-        </div>
+
         <div class="card">
             <p class="card-title">// operações</p>
             <div class="nav-links">
-                <a class="nav-link" href="{% url 'mdproject:save' %}">
+                <a class="nav-link" id="link-save" href="{% url 'mdproject:save' %}">
+                    <span class="nav-tip">
+                        <span class="nav-tip-title">Gerar chave pública</span>
+                        Recebe dois primos (p, q) e o expoente e. Calcula n = p×q e salva o par (n, e) como chave pública — usada para cifrar mensagens.
+                    </span>
+                    <span class="step-num">01</span>
                     <div class="nav-link-left">
                         <span>Salvar chave pública</span>
-                        <span class="nav-link-sub">gerar_chave(p, q, e)</span>
+                        <span class="nav-link-sub">n = p×q &nbsp;·&nbsp; chave = (n, e)</span>
                     </div>
+                    <span class="done-badge">✓ feito</span>
                     <span class="nav-arrow">→</span>
                 </a>
-                <a class="nav-link" href="{% url 'mdproject:crypt' %}">
+                <a class="nav-link" id="link-crypt" href="{% url 'mdproject:crypt' %}">
+                    <span class="nav-tip">
+                        <span class="nav-tip-title">Cifrar mensagem</span>
+                        Usa a chave pública (n, e) para cifrar cada caractere com c = mᵉ mod n. O resultado só pode ser revertido com a chave privada d.
+                    </span>
+                    <span class="step-num">02</span>
                     <div class="nav-link-left">
                         <span>Criptografar mensagem</span>
-                        <span class="nav-link-sub">cifrar(m, n, e)</span>
+                        <span class="nav-link-sub">c = mᵉ mod n</span>
                     </div>
+                    <span class="done-badge">✓ feito</span>
                     <span class="nav-arrow">→</span>
                 </a>
-                <a class="nav-link" href="{% url 'mdproject:descrypt' %}">
+                <a class="nav-link" id="link-decrypt" href="{% url 'mdproject:descrypt' %}">
+                    <span class="nav-tip">
+                        <span class="nav-tip-title">Decifrar mensagem</span>
+                        Com p, q e e, deriva a chave privada d = e⁻¹ mod φ(n) e reverte a cifragem com m = cᵈ mod n.
+                    </span>
+                    <span class="step-num">03</span>
                     <div class="nav-link-left">
                         <span>Descriptografar mensagem</span>
-                        <span class="nav-link-sub">decifrar(c, p, q, e)</span>
+                        <span class="nav-link-sub">m = cᵈ mod n</span>
                     </div>
+                    <span class="done-badge">✓ feito</span>
                     <span class="nav-arrow">→</span>
                 </a>
             </div>
         </div>
+
+        <div class="upload-section">
+            <div class="upload-divider">
+                <span class="upload-divider-label">// ferramentas</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+                <button class="btn-reset" id="resetBtn" onclick="resetAll()">
+                    <span class="reset-icon">↺</span> nova criptografia
+                </button>
+                <button class="upload-toggle" id="uploadToggle" type="button">
+                    <span class="arrow">›</span> enviar arquivo do aluno
+                </button>
+            </div>
+            <div class="upload-body" id="uploadBody">
+                <form method="POST" action="{% url 'mdproject:upload_c_zip' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="field">
+                        <input type="file" name="zip_file" accept=".zip">
+                    </div>
+                    <button class="btn btn-soft" type="submit">Enviar ZIP</button>
+                </form>
+                {% if upload_error %}
+                    <div class="status status-error">{{ upload_error }}</div>
+                {% endif %}
+                {% if upload_success %}
+                    <div class="status status-success">{{ upload_success }}</div>
+                {% endif %}
+            </div>
+        </div>
     </div>
+
+    <script>
+        function applyBadges() {
+            document.getElementById('link-save').classList.toggle('is-done', !!localStorage.getItem('rsa_done_save'));
+            document.getElementById('link-crypt').classList.toggle('is-done', !!localStorage.getItem('rsa_done_crypt'));
+            document.getElementById('link-decrypt').classList.toggle('is-done', !!localStorage.getItem('rsa_done_decrypt'));
+        }
+        applyBadges();
+
+        function resetAll() {
+            // limpa só os buffers de progresso — file input e demais campos não são tocados
+            localStorage.removeItem('rsa_done_save');
+            localStorage.removeItem('rsa_done_crypt');
+            localStorage.removeItem('rsa_done_decrypt');
+            applyBadges();
+            const btn = document.getElementById('resetBtn');
+            btn.classList.add('cleared');
+            btn.innerHTML = '<span class="reset-icon">✓</span> pronto pra mais um segredo';
+            setTimeout(() => {
+                btn.classList.remove('cleared');
+                btn.innerHTML = '<span class="reset-icon">↺</span> nova criptografia';
+            }, 2000);
+        }
+
+        const toggle = document.getElementById('uploadToggle');
+        const body = document.getElementById('uploadBody');
+        toggle.addEventListener('click', () => {
+            const open = body.classList.toggle('open');
+            toggle.classList.toggle('open', open);
+        });
+        {% if upload_error or upload_success %}
+        body.classList.add('open');
+        toggle.classList.add('open');
+        {% endif %}
+    </script>
 </body>
 </html>

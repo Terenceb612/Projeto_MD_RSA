@@ -30,10 +30,13 @@
         .page { max-width: 960px; margin: 0 auto; padding: 56px 24px 80px; }
         .page-header { margin-bottom: 36px; text-align: center; animation: fadeUp 0.45s ease-out both; }
         .page-header .label { font-family: var(--mono); font-size: 13px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; opacity: 0.75; }
-        .page-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.4px; color: #e0f5d8; }
+        .page-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.4px; color: #e0f5d8 }
 
         .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
-        @media (max-width: 640px) { .split { grid-template-columns: 1fr; } }
+        @media (max-width: 640px) {
+            .split { grid-template-columns: 1fr; }
+            .split > .card:nth-child(2) { order: -1; } /* math panel acima do form no mobile */
+        }
 
         .card {
             background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
@@ -43,7 +46,8 @@
         .split > .card:nth-child(1) { animation-delay: 0.10s; }
         .split > .card:nth-child(2) { animation-delay: 0.20s; }
         .card:hover { border-color: var(--border-hover); }
-        .card-title { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 20px; }
+        .card-title { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 4px; }
+        .card-desc { font-family: var(--mono); font-size: 11px; color: var(--text-secondary); opacity: 0.5; margin-bottom: 20px; letter-spacing: 0.3px; }
 
         .field { margin-bottom: 18px; }
         .field label { display: block; font-family: var(--mono); font-size: 13px; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 7px; }
@@ -54,7 +58,7 @@
             -webkit-text-fill-color: var(--text-primary); caret-color: var(--accent);
         }
         .field input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(68,214,44,0.10); }
-        .field input::placeholder { color: var(--text-secondary); opacity: 0.45; }
+        .field input::placeholder { color: var(--text-secondary); opacity: 0.65; }
         .field input:-webkit-autofill,
         .field input:-webkit-autofill:hover,
         .field input:-webkit-autofill:focus {
@@ -62,6 +66,7 @@
             -webkit-text-fill-color: var(--text-primary) !important;
             caret-color: var(--accent);
         }
+        .field-hint { font-family: var(--mono); font-size: 11px; color: var(--text-secondary); opacity: 0.6; margin-top: 5px; letter-spacing: 0.3px; }
 
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
@@ -81,6 +86,16 @@
 
         .divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
         .result-label { font-family: var(--mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; display: block; }
+        .copy-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-family: var(--mono); font-size: 11px; letter-spacing: 1px;
+            color: var(--text-secondary); background: rgba(68,214,44,0.07);
+            border: 1px solid rgba(68,214,44,0.20); border-radius: 6px;
+            padding: 5px 12px; cursor: pointer; transition: color 0.15s, background 0.15s;
+            margin-top: 10px;
+        }
+        .copy-btn:hover { color: var(--accent); background: rgba(68,214,44,0.13); }
+        .copy-btn.copied { color: var(--accent); border-color: rgba(68,214,44,0.4); }
         .result-box {
             background: rgba(0,0,0,0.5); border: 1px solid var(--border); border-radius: 8px;
             padding: 14px 16px; font-family: var(--mono); font-size: 14px;
@@ -88,7 +103,8 @@
         }
 
         .math-row { margin-bottom: 20px; }
-        .math-label { font-family: var(--mono); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 4px; }
+        .math-label { font-family: var(--mono); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 2px; }
+        .math-desc { font-family: var(--mono); font-size: 10px; color: var(--text-secondary); opacity: 0.65; margin-bottom: 4px; letter-spacing: 0.3px; }
         .math-value { font-family: var(--mono); font-size: 15px; color: var(--accent); word-break: break-all; min-height: 22px; }
         .math-value.invalid { color: #ff5e6c; }
         .math-verify { font-family: var(--mono); font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
@@ -99,6 +115,29 @@
             transition: color 0.15s; animation: fadeUp 0.5s ease-out both; animation-delay: 0.30s;
         }
         .back-link:hover { color: var(--accent); }
+
+        /* Tooltips */
+        .has-tip { position: relative; cursor: help; }
+        .tip {
+            position: absolute;
+            bottom: calc(100% + 10px); left: 0;
+            width: 270px;
+            background: rgba(2,8,2,0.97);
+            border: 1px solid rgba(68,214,44,0.28);
+            border-radius: 8px; padding: 11px 14px;
+            font-size: 12px; font-family: var(--mono);
+            color: var(--text-primary); line-height: 1.6;
+            letter-spacing: 0; text-transform: none; font-weight: 400;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.15s ease; transition-delay: 0s;
+            z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+        }
+        .tip::after {
+            content: ''; position: absolute; top: 100%; left: 18px;
+            border: 5px solid transparent; border-top-color: rgba(68,214,44,0.28);
+        }
+        .tip-title { color: var(--accent); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 5px; }
+        .has-tip:hover .tip { opacity: 1; transition-delay: 0.5s; }
     </style>
 </head>
 <body>
@@ -106,6 +145,7 @@
         <div class="page-header">
             <div class="label">// decifrar_mensagem()</div>
             <h1>Descriptografar</h1>
+            <div class="subtitle">// m = c<sup>d</sup> mod n &nbsp;|&nbsp; d = e⁻¹ mod φ(n)</div>
         </div>
 
         <div class="split">
@@ -114,17 +154,34 @@
                 <form id="descrypt-form" method="POST" action="{% url 'mdproject:descrypt' %}">
                     {% csrf_token %}
                     <div class="field">
-                        <label>primo_p</label>
+                        <label class="has-tip">primo_p
+                            <span class="tip">
+                                <span class="tip-title">Primeiro primo (p)</span>
+                                Um dos fatores secretos de n. Com p e q, é possível calcular φ(n) e derivar a chave privada d. Mantenha em segredo.
+                            </span>
+                        </label>
                         <input type="text" id="p" name="p" placeholder="valor de p">
                     </div>
                     <div class="field">
-                        <label>primo_q</label>
+                        <label class="has-tip">primo_q
+                            <span class="tip">
+                                <span class="tip-title">Segundo primo (q)</span>
+                                O outro fator secreto de n. Junto com p, permite reconstruir toda a chave privada. Deve ser diferente de p.
+                            </span>
+                        </label>
                         <input type="text" id="q" name="q" placeholder="valor de q">
                     </div>
                     <div class="field">
-                        <label>expoente_e</label>
+                        <label class="has-tip">expoente_e
+                            <span class="tip">
+                                <span class="tip-title">Expoente público (e)</span>
+                                O mesmo e usado na cifragem. É público e necessário para derivar d.
+
+                            Precisa ser coprimo com φ(n) pois d = e⁻¹ mod φ(n) só existe quando mdc(e, φ(n)) = 1 — garantia exigida pelo Teorema de Euler. Sem isso, não há chave privada válida.
+                            </span>
+                        </label>
                         <input type="text" id="e" name="e" placeholder="valor de e">
-                    </div>
+                        </div>
                     {% if status %}
                         <div class="status">{{ status }}</div>
                     {% endif %}
@@ -136,7 +193,8 @@
                 {% if decrypted_text %}
                     <hr class="divider">
                     <span class="result-label">mensagem_decifrada</span>
-                    <div class="result-box">{{ decrypted_text }}</div>
+                    <div class="result-box" id="decryptedText">{{ decrypted_text }}</div>
+                    <button class="copy-btn" id="copyBtn" onclick="copyDecrypted()">copiar resultado</button>
                 {% endif %}
             </div>
 
@@ -145,18 +203,22 @@
 
                 <div class="math-row">
                     <div class="math-label">n = p × q</div>
+                    <div class="math-desc">// módulo público — produto dos dois primos</div>
                     <div class="math-value" id="val-n">—</div>
                 </div>
                 <div class="math-row">
                     <div class="math-label">φ(n) = (p−1)(q−1)</div>
+                    <div class="math-desc">// totiente de Euler — quantidade de coprimos com n</div>
                     <div class="math-value" id="val-phi">—</div>
                 </div>
                 <div class="math-row">
                     <div class="math-label">d = e⁻¹ mod φ(n)</div>
+                    <div class="math-desc">// chave privada — inverso modular de e</div>
                     <div class="math-value" id="val-d">—</div>
                 </div>
                 <div class="math-row">
                     <div class="math-label">verificação: (e × d) mod φ(n)</div>
+                    <div class="math-desc">// deve resultar em 1 para a chave ser válida</div>
                     <div class="math-value" id="val-verify">—</div>
                     <div class="math-verify" id="val-verify-msg"></div>
                 </div>
@@ -220,5 +282,19 @@
         document.getElementById('q').addEventListener('input', update);
         document.getElementById('e').addEventListener('input', update);
     </script>
+    {% if decrypted_text %}
+    <script>
+        localStorage.setItem('rsa_done_decrypt', '1');
+        function copyDecrypted() {
+            const text = document.getElementById('decryptedText').textContent.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = '✓ copiado';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = 'copiar resultado'; btn.classList.remove('copied'); }, 2000);
+            });
+        }
+    </script>
+    {% endif %}
 </body>
 </html>

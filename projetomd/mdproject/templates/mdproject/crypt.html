@@ -30,8 +30,7 @@
         .page { max-width: 640px; margin: 0 auto; padding: 56px 24px 80px; }
         .page-header { margin-bottom: 36px; text-align: center; animation: fadeUp 0.45s ease-out both; }
         .page-header .label { font-family: var(--mono); font-size: 13px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; opacity: 0.75; }
-        .page-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.4px; color: #e0f5d8; }
-        
+        .page-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.4px; color: #e0f5d8 }
 
         .card {
             background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
@@ -43,14 +42,17 @@
 
         .field { margin-bottom: 18px; }
         .field label { display: block; font-family: var(--mono); font-size: 13px; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 7px; }
-        .field input[type="text"] {
+        .field input[type="text"], .field textarea {
             width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px;
             font-family: var(--mono); font-size: 14px; background: rgba(4,10,4,0.90);
             color: var(--text-primary); outline: none; transition: border-color 0.15s, box-shadow 0.15s;
             -webkit-text-fill-color: var(--text-primary); caret-color: var(--accent);
         }
-        .field input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(68,214,44,0.10); }
-        .field input::placeholder { color: var(--text-secondary); opacity: 0.45; }
+        .field textarea {
+            resize: vertical; min-height: 100px; max-height: 320px; line-height: 1.5;
+        }
+        .field input[type="text"]:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(68,214,44,0.10); }
+        .field input::placeholder, .field textarea::placeholder { color: var(--text-secondary); opacity: 0.65; }
         .field input:-webkit-autofill,
         .field input:-webkit-autofill:hover,
         .field input:-webkit-autofill:focus {
@@ -58,6 +60,7 @@
             -webkit-text-fill-color: var(--text-primary) !important;
             caret-color: var(--accent);
         }
+        .field-hint { font-family: var(--mono); font-size: 11px; color: var(--text-secondary); opacity: 0.6; margin-top: 5px; letter-spacing: 0.3px; }
 
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
@@ -74,6 +77,9 @@
             padding: 10px 14px; border-radius: 8px; font-family: var(--mono); font-size: 13px; margin-top: 14px;
             background: rgba(68,214,44,0.08); color: var(--success); border: 1px solid rgba(68,214,44,0.2);
         }
+        .status-error {
+            background: rgba(255,94,108,0.08); color: #ff5e6c; border: 1px solid rgba(255,94,108,0.2);
+        }
 
         .back-link {
             display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary);
@@ -81,9 +87,48 @@
             transition: color 0.15s; animation: fadeUp 0.5s ease-out both; animation-delay: 0.30s;
         }
         .back-link:hover { color: var(--accent); }
+        /* toast + progress bar */
+        .s-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); z-index: 1001; width: 0; }
+        .s-toast {
+            display: none; position: fixed; bottom: 20px; right: 20px;
+            background: rgba(4,12,4,0.97); border: 1px solid rgba(68,214,44,0.28);
+            border-radius: 8px; padding: 9px 16px;
+            align-items: center; gap: 8px;
+            font-family: var(--mono); font-size: 11px; color: var(--text-secondary);
+            animation: toastIn 0.18s ease both; z-index: 1000;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5); letter-spacing: 0.3px;
+        }
+        .s-toast.show { display: flex; }
+        @keyframes toastIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+        .s-check { color: var(--accent); font-size: 13px; }
+
+        /* Tooltips */
+        .has-tip { position: relative; cursor: help; }
+        .tip {
+            position: absolute;
+            bottom: calc(100% + 10px); left: 0;
+            width: 270px;
+            background: rgba(2,8,2,0.97);
+            border: 1px solid rgba(68,214,44,0.28);
+            border-radius: 8px; padding: 11px 14px;
+            font-size: 12px; font-family: var(--mono);
+            color: var(--text-primary); line-height: 1.6;
+            letter-spacing: 0; text-transform: none; font-weight: 400;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.15s ease; transition-delay: 0s;
+            z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+        }
+        .tip::after {
+            content: ''; position: absolute; top: 100%; left: 18px;
+            border: 5px solid transparent; border-top-color: rgba(68,214,44,0.28);
+        }
+        .tip-title { color: var(--accent); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 5px; }
+        .has-tip:hover .tip { opacity: 1; transition-delay: 0.5s; }
     </style>
 </head>
 <body>
+    <div class="s-bar" id="sBar"></div>
+    <div class="s-toast" id="sToast"><span class="s-check">✓</span> mensagem criptografada</div>
     <div class="page">
         <div class="page-header">
             <div class="label">// cifrar_mensagem()</div>
@@ -91,31 +136,63 @@
         </div>
 
         <div class="card">
-                <p class="card-title">// entrada</p>
-                <form id="encrypt-form" method="POST" action="{% url 'mdproject:crypt' %}">
-                    {% csrf_token %}
-                    <div class="field">
-                        <label>mensagem</label>
-                        <input type="text" id="mensagem" name="mensagem" placeholder="texto a criptografar...">
-                    </div>
-                    <div class="field">
-                        <label>chave_n</label>
-                        <input type="text" id="n" name="n" placeholder="valor de n">
-                    </div>
-                    <div class="field">
-                        <label>expoente_e</label>
-                        <input type="text" id="e" name="e" placeholder="valor de e">
-                    </div>
-                    {% if status %}
+            <p class="card-title">// entrada</p>
+            <form id="encrypt-form" method="POST" action="{% url 'mdproject:crypt' %}">
+                {% csrf_token %}
+                <div class="field">
+                    <label class="has-tip">mensagem
+                        <span class="tip">
+                            <span class="tip-title">Mensagem (m)</span>
+                            Texto que será criptografado. Cada caractere é convertido para seu valor numérico e cifrado com a fórmula c = mᵉ mod n.
+                        </span>
+                    </label>
+                    <textarea id="mensagem" name="mensagem" placeholder="texto a criptografar... (suporta textos longos)"></textarea>
+                </div>
+                <div class="field">
+                    <label class="has-tip">chave_n
+                        <span class="tip">
+                            <span class="tip-title">Módulo público (n)</span>
+                            Produto dos dois primos secretos: n = p×q. Faz parte da chave pública e define o espaço de cifragem. Quanto maior, mais seguro.
+                        </span>
+                    </label>
+                    <input type="text" id="n" name="n" placeholder="valor de n">
+                </div>
+                <div class="field">
+                    <label class="has-tip">expoente_e
+                        <span class="tip">
+                            <span class="tip-title">Expoente público (e)</span>
+                            Usado na cifragem: c = mᵉ mod n. Junto com n, forma a chave pública.<br><br>
+                            Deve ser coprimo com φ(n) porque a decifragem exige o inverso modular d = e⁻¹ mod φ(n) — que só existe quando mdc(e, φ(n)) = 1. Valor comum: 65537.
+                        </span>
+                    </label>
+                    <input type="text" id="e" name="e" placeholder="valor de e">
+                </div>
+                {% if status %}
+                    {% if status == 'Mensagem criptografada com sucesso' %}
                         <div class="status">{{ status }}</div>
+                    {% else %}
+                        <div class="status status-error">{{ status }}</div>
                     {% endif %}
-                    <div class="form-actions">
-                        <button class="btn btn-primary" type="submit">Criptografar</button>
-                    </div>
-                </form>
+                {% endif %}
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">Criptografar</button>
+                </div>
+            </form>
         </div>
 
         <a class="back-link" href="{% url 'mdproject:index' %}">← voltar ao início</a>
     </div>
+
+    {% if status == 'Mensagem criptografada com sucesso' %}
+    <script>
+        localStorage.setItem('rsa_done_crypt', '1');
+        document.getElementById('sToast').classList.add('show');
+        const bar = document.getElementById('sBar');
+        const dur = 1100;
+        bar.style.transition = 'width ' + dur + 'ms linear';
+        requestAnimationFrame(() => bar.style.width = '100%');
+        setTimeout(() => { window.location.href = "{% url 'mdproject:index' %}"; }, dur + 80);
+    </script>
+    {% endif %}
 </body>
 </html>
