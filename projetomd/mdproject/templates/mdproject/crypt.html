@@ -14,7 +14,7 @@
             --border: rgba(68,214,44,0.13); --border-hover: rgba(68,214,44,0.40);
             --text-primary: #c8f0c0; --text-secondary: #6aaa5a;
             --accent: #44d62c; --accent-dim: rgba(68,214,44,0.08); --accent-hover: rgba(68,214,44,0.14);
-            --success: #44d62c; --radius: 12px; --mono: 'JetBrains Mono', monospace;
+            --danger: #ff5e6c; --success: #44d62c; --radius: 12px; --mono: 'JetBrains Mono', monospace;
         }
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(18px); }
@@ -32,6 +32,25 @@
         .page-header .label { font-family: var(--mono); font-size: 13px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 10px; opacity: 0.75; }
         .page-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.4px; color: #e0f5d8 }
 
+        /* ── Tabs ── */
+        .tabs {
+            display: flex; gap: 4px; margin-bottom: 20px;
+            background: rgba(4,10,4,0.6); border: 1px solid var(--border);
+            border-radius: 10px; padding: 4px;
+            animation: fadeUp 0.45s ease-out both;
+        }
+        .tab-btn {
+            flex: 1; padding: 8px 14px; border: none; border-radius: 7px;
+            font-family: var(--mono); font-size: 12px; letter-spacing: 0.8px;
+            cursor: pointer; transition: background 0.15s, color 0.15s;
+            background: transparent; color: var(--text-secondary);
+        }
+        .tab-btn.active {
+            background: var(--accent-hover); color: var(--accent);
+            border: 1px solid rgba(68,214,44,0.25);
+        }
+        .tab-btn:hover:not(.active) { color: var(--text-primary); }
+
         .card {
             background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
             padding: 28px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -48,9 +67,7 @@
             color: var(--text-primary); outline: none; transition: border-color 0.15s, box-shadow 0.15s;
             -webkit-text-fill-color: var(--text-primary); caret-color: var(--accent);
         }
-        .field textarea {
-            resize: vertical; min-height: 100px; max-height: 320px; line-height: 1.5;
-        }
+        .field textarea { resize: vertical; min-height: 100px; max-height: 320px; line-height: 1.5; }
         .field input[type="text"]:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(68,214,44,0.10); }
         .field input::placeholder, .field textarea::placeholder { color: var(--text-secondary); opacity: 0.65; }
         .field input:-webkit-autofill,
@@ -61,6 +78,46 @@
             caret-color: var(--accent);
         }
         .field-hint { font-family: var(--mono); font-size: 11px; color: var(--text-secondary); opacity: 0.6; margin-top: 5px; letter-spacing: 0.3px; }
+
+        /* ── Input source toggle (colar / arquivo) ── */
+        .source-toggle {
+            display: flex; gap: 4px; margin-bottom: 14px;
+        }
+        .src-btn {
+            padding: 5px 14px; border-radius: 6px; border: 1px solid var(--border);
+            font-family: var(--mono); font-size: 11px; letter-spacing: 0.5px;
+            cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s;
+            background: transparent; color: var(--text-secondary);
+        }
+        .src-btn.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(68,214,44,0.30); }
+        .src-btn:hover:not(.active) { color: var(--text-primary); border-color: var(--border-hover); }
+
+        /* file input */
+        .field input[type="file"] {
+            width: 100%; padding: 9px 13px; border: 1px solid var(--border); border-radius: 8px;
+            font-family: inherit; font-size: 14px; background: rgba(0,0,0,0.5);
+            color: var(--text-secondary); outline: none;
+        }
+        .field input[type="file"]::file-selector-button {
+            background: rgba(68,214,44,0.08); color: var(--accent);
+            border: 1px solid rgba(68,214,44,0.25); border-radius: 6px;
+            padding: 4px 12px; font-family: var(--mono); font-size: 12px;
+            font-weight: 500; cursor: pointer; margin-right: 10px; transition: background 0.15s;
+        }
+        .field input[type="file"]::file-selector-button:hover { background: rgba(68,214,44,0.14); }
+
+        /* resultado descriptografia externa */
+        .result-box {
+            margin-top: 18px; padding: 14px 16px;
+            background: rgba(68,214,44,0.04); border: 1px solid rgba(68,214,44,0.18);
+            border-radius: 8px;
+        }
+        .result-box-label { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 8px; }
+        .result-box pre {
+            font-family: var(--mono); font-size: 13px; color: var(--text-primary);
+            white-space: pre-wrap; word-break: break-word; max-height: 240px; overflow-y: auto;
+            line-height: 1.55;
+        }
 
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
@@ -78,7 +135,7 @@
             background: rgba(68,214,44,0.08); color: var(--success); border: 1px solid rgba(68,214,44,0.2);
         }
         .status-error {
-            background: rgba(255,94,108,0.08); color: #ff5e6c; border: 1px solid rgba(255,94,108,0.2);
+            background: rgba(255,94,108,0.08); color: var(--danger); border: 1px solid rgba(255,94,108,0.2);
         }
 
         .back-link {
@@ -87,7 +144,7 @@
             transition: color 0.15s; animation: fadeUp 0.5s ease-out both; animation-delay: 0.30s;
         }
         .back-link:hover { color: var(--accent); }
-        /* toast + progress bar */
+
         .s-bar { position: fixed; top: 0; left: 0; height: 2px; background: var(--accent); z-index: 1001; width: 0; }
         .s-toast {
             display: none; position: fixed; bottom: 20px; right: 20px;
@@ -102,28 +159,21 @@
         @keyframes toastIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
         .s-check { color: var(--accent); font-size: 13px; }
 
-        /* Tooltips */
         .has-tip { position: relative; cursor: help; }
         .tip {
-            position: absolute;
-            bottom: calc(100% + 10px); left: 0;
-            width: 270px;
-            background: rgba(2,8,2,0.97);
-            border: 1px solid rgba(68,214,44,0.28);
+            position: absolute; bottom: calc(100% + 10px); left: 0; width: 270px;
+            background: rgba(2,8,2,0.97); border: 1px solid rgba(68,214,44,0.28);
             border-radius: 8px; padding: 11px 14px;
-            font-size: 12px; font-family: var(--mono);
-            color: var(--text-primary); line-height: 1.6;
+            font-size: 12px; font-family: var(--mono); color: var(--text-primary); line-height: 1.6;
             letter-spacing: 0; text-transform: none; font-weight: 400;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.15s ease; transition-delay: 0s;
+            opacity: 0; pointer-events: none; transition: opacity 0.15s ease; transition-delay: 0s;
             z-index: 200; box-shadow: 0 8px 24px rgba(0,0,0,0.7);
         }
-        .tip::after {
-            content: ''; position: absolute; top: 100%; left: 18px;
-            border: 5px solid transparent; border-top-color: rgba(68,214,44,0.28);
-        }
+        .tip::after { content: ''; position: absolute; top: 100%; left: 18px; border: 5px solid transparent; border-top-color: rgba(68,214,44,0.28); }
         .tip-title { color: var(--accent); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 5px; }
         .has-tip:hover .tip { opacity: 1; transition-delay: 0.5s; }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -135,9 +185,16 @@
             <h1>Criptografar</h1>
         </div>
 
-        <div class="card">
+        <!-- ── TABS ── -->
+        <div class="tabs">
+            <button class="tab-btn" id="tab-encrypt" onclick="switchTab('encrypt')">// criptografar</button>
+            <button class="tab-btn" id="tab-external" onclick="switchTab('external')">// descriptografar externo</button>
+        </div>
+
+        <!-- ── PAINEL: CRIPTOGRAFAR ── -->
+        <div class="card" id="panel-encrypt">
             <p class="card-title">// entrada</p>
-            <form id="encrypt-form" method="POST" action="{% url 'mdproject:crypt' %}">
+            <form id="encrypt-form" method="POST" action="{% url 'mdproject:crypt' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="field">
                     <label class="has-tip">mensagem
@@ -146,13 +203,23 @@
                             Texto que será criptografado. Cada caractere é convertido para seu valor numérico e cifrado com a fórmula c = mᵉ mod n.
                         </span>
                     </label>
-                    <textarea id="mensagem" name="mensagem" placeholder="texto a criptografar... (suporta textos longos)"></textarea>
+                    <div class="source-toggle">
+                        <button type="button" class="src-btn active" id="enc-src-paste" onclick="setEncSource('paste')">digitar texto</button>
+                        <button type="button" class="src-btn" id="enc-src-file" onclick="setEncSource('file')">enviar .txt</button>
+                    </div>
+                    <div id="enc-input-paste">
+                        <textarea id="mensagem" name="mensagem" placeholder="texto a criptografar... (suporta textos longos)"></textarea>
+                    </div>
+                    <div id="enc-input-file" class="hidden">
+                        <input type="file" name="msg_file" id="msg_file" accept=".txt">
+                        <div class="field-hint">arquivo .txt com o texto a ser criptografado</div>
+                    </div>
                 </div>
                 <div class="field">
                     <label class="has-tip">chave_n
                         <span class="tip">
                             <span class="tip-title">Módulo público (n)</span>
-                            Produto dos dois primos secretos: n = p×q. Faz parte da chave pública e define o espaço de cifragem. Quanto maior, mais seguro.
+                            Produto dos dois primos secretos: n = p×q. Faz parte da chave pública e define o espaço de cifragem.
                         </span>
                     </label>
                     <input type="text" id="n" name="n" placeholder="valor de n">
@@ -162,7 +229,7 @@
                         <span class="tip">
                             <span class="tip-title">Expoente público (e)</span>
                             Usado na cifragem: c = mᵉ mod n. Junto com n, forma a chave pública.<br><br>
-                            Deve ser coprimo com φ(n) porque a decifragem exige o inverso modular d = e⁻¹ mod φ(n) — que só existe quando mdc(e, φ(n)) = 1. Valor comum: 65537.
+                            Deve ser coprimo com φ(n). Valor comum: 65537.
                         </span>
                     </label>
                     <input type="text" id="e" name="e" placeholder="valor de e">
@@ -176,6 +243,83 @@
                 {% endif %}
                 <div class="form-actions">
                     <button class="btn btn-primary" type="submit">Criptografar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ── PAINEL: DESCRIPTOGRAFAR EXTERNO ── -->
+        <div class="card hidden" id="panel-external">
+            <p class="card-title">// descriptografar texto de outra equipe</p>
+            <form id="external-form" method="POST" action="{% url 'mdproject:decrypt_external' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- toggle: colar texto / enviar arquivo -->
+                <div class="field">
+                    <label>origem do texto cifrado</label>
+                    <div class="source-toggle">
+                        <button type="button" class="src-btn active" id="src-paste" onclick="setSource('paste')">colar texto</button>
+                        <button type="button" class="src-btn" id="src-file" onclick="setSource('file')">enviar .txt</button>
+                    </div>
+
+                    <div id="input-paste">
+                        <textarea name="ciphertext" id="ciphertext"
+                            placeholder="cole aqui o texto criptografado (números separados por espaço)..."
+                            style="min-height:120px;"></textarea>
+                        <div class="field-hint">formato esperado: 12345 67890 11111 ...</div>
+                    </div>
+
+                    <div id="input-file" class="hidden">
+                        <input type="file" name="cipher_file" id="cipher_file" accept=".txt">
+                        <div class="field-hint">arquivo .txt com os números separados por espaço ou por linha</div>
+                    </div>
+                </div>
+
+                <!-- p, q, e da equipe receptora -->
+                <div class="field">
+                    <label class="has-tip">primo_p
+                        <span class="tip">
+                            <span class="tip-title">Primo p</span>
+                            Um dos dois primos usados na geração das suas chaves. Necessário para derivar d = e⁻¹ mod φ(n).
+                        </span>
+                    </label>
+                    <input type="text" name="p" placeholder="seu primo p">
+                </div>
+                <div class="field">
+                    <label class="has-tip">primo_q
+                        <span class="tip">
+                            <span class="tip-title">Primo q</span>
+                            O segundo primo. Junto com p, define n = p×q e φ(n) = (p−1)(q−1).
+                        </span>
+                    </label>
+                    <input type="text" name="q" placeholder="seu primo q">
+                </div>
+                <div class="field">
+                    <label class="has-tip">expoente_e
+                        <span class="tip">
+                            <span class="tip-title">Expoente público (e)</span>
+                            O mesmo e usado na geração das suas chaves. O sistema calcula d = e⁻¹ mod φ(n) e usa para decifrar.
+                        </span>
+                    </label>
+                    <input type="text" name="e" placeholder="seu expoente e">
+                </div>
+
+                {% if ext_status %}
+                    {% if ext_status_error %}
+                        <div class="status status-error">{{ ext_status }}</div>
+                    {% else %}
+                        <div class="status">{{ ext_status }}</div>
+                    {% endif %}
+                {% endif %}
+
+                {% if decrypted_text %}
+                    <div class="result-box">
+                        <div class="result-box-label">// texto descriptografado</div>
+                        <pre>{{ decrypted_text }}</pre>
+                    </div>
+                {% endif %}
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">Descriptografar</button>
                 </div>
             </form>
         </div>
@@ -194,5 +338,46 @@
         setTimeout(() => { window.location.href = "{% url 'mdproject:index' %}"; }, dur + 80);
     </script>
     {% endif %}
+
+    <script>
+        // ── Tabs ────────────────────────────────────────────────────────────
+        function switchTab(tab) {
+            const isExternal = tab === 'external';
+            document.getElementById('panel-encrypt').classList.toggle('hidden', isExternal);
+            document.getElementById('panel-external').classList.toggle('hidden', !isExternal);
+            document.getElementById('tab-encrypt').classList.toggle('active', !isExternal);
+            document.getElementById('tab-external').classList.toggle('active', isExternal);
+            localStorage.setItem('crypt_tab', tab);
+        }
+
+        // ── Source toggle (decrypt external) ────────────────────────────────
+        function setSource(src) {
+            const isPaste = src === 'paste';
+            document.getElementById('input-paste').classList.toggle('hidden', !isPaste);
+            document.getElementById('input-file').classList.toggle('hidden', isPaste);
+            document.getElementById('src-paste').classList.toggle('active', isPaste);
+            document.getElementById('src-file').classList.toggle('active', !isPaste);
+        }
+
+        // ── Source toggle (encrypt) ──────────────────────────────────────────
+        function setEncSource(src) {
+            const isPaste = src === 'paste';
+            document.getElementById('enc-input-paste').classList.toggle('hidden', !isPaste);
+            document.getElementById('enc-input-file').classList.toggle('hidden', isPaste);
+            document.getElementById('enc-src-paste').classList.toggle('active', isPaste);
+            document.getElementById('enc-src-file').classList.toggle('active', !isPaste);
+        }
+
+        // ── Restaurar tab ────────────────────────────────────────────────────
+        (function() {
+            {% if mode == 'external' %}
+                switchTab('external');
+            {% else %}
+                const saved = localStorage.getItem('crypt_tab');
+                if (saved === 'external') switchTab('external');
+                else switchTab('encrypt');
+            {% endif %}
+        })();
+    </script>
 </body>
 </html>

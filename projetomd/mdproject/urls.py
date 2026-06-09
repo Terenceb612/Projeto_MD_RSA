@@ -8,4 +8,5 @@ urlpatterns = [
     path('crypt/', views.crypt, name='crypt'),
     path('descrypt/', views.descrypt, name='descrypt'),
     path('reset/', views.reset, name='reset'),
+    path('decrypt-external/', views.decrypt_external, name='decrypt_external'),
 ]

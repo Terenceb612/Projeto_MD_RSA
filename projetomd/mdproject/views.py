@@ -217,7 +217,12 @@ def save(request):
 def crypt(request):
     try:
         if request.method == 'POST':
-            mensagem = request.POST.get('mensagem', '')
+            # Aceita texto digitado ou arquivo .txt
+            msg_file = request.FILES.get('msg_file')
+            if msg_file:
+                mensagem = msg_file.read().decode('utf-8', errors='replace')
+            else:
+                mensagem = request.POST.get('mensagem', '')
             n = request.POST.get('n', '')
             e = request.POST.get('e', '')
             if n and e:
@@ -239,6 +244,85 @@ def crypt(request):
     
     
     
+def decrypt_external(request):
+    """Recebe texto cifrado de outra equipe (colado ou em .txt) e descriptografa."""
+    if request.method == 'POST':
+        # 1. Obtém o texto cifrado: arquivo tem prioridade sobre textarea
+        ciphertext = ''
+        cipher_file = request.FILES.get('cipher_file')
+        if cipher_file:
+            try:
+                ciphertext = cipher_file.read().decode('utf-8', errors='replace').strip()
+            except Exception:
+                return render(request, 'mdproject/crypt.html', {
+                    'mode': 'external',
+                    'ext_status': 'Erro ao ler o arquivo enviado.',
+                    'ext_status_error': True,
+                })
+        else:
+            ciphertext = request.POST.get('ciphertext', '').strip()
+
+        p = request.POST.get('p', '').strip()
+        q = request.POST.get('q', '').strip()
+        e = request.POST.get('e', '').strip()
+
+        if not ciphertext:
+            return render(request, 'mdproject/crypt.html', {
+                'mode': 'external',
+                'ext_status': 'Nenhum texto cifrado fornecido.',
+                'ext_status_error': True,
+            })
+        if not p or not q or not e:
+            return render(request, 'mdproject/crypt.html', {
+                'mode': 'external',
+                'ext_status': 'Preencha os campos p, q e e.',
+                'ext_status_error': True,
+            })
+
+        # 2. Normaliza separadores: qualquer espaço em branco → espaço simples
+        ciphertext = ' '.join(ciphertext.split())
+
+        # 3. Salva o texto cifrado em textEncript.txt (mesmo arquivo lido pela DLL)
+        encript_file = PROJECT_ROOT / 'textEncript.txt'
+        try:
+            encript_file.write_text(ciphertext, encoding='utf-8')
+        except Exception as ex:
+            return render(request, 'mdproject/crypt.html', {
+                'mode': 'external',
+                'ext_status': f'Erro ao salvar arquivo temporário: {ex}',
+                'ext_status_error': True,
+            })
+
+        # 3. Chama a DLL para descriptografar
+        try:
+            lib = load_menu_library()
+            status = lib.desencriptarMenu(p.encode(), q.encode(), e.encode())
+        except Exception as ex:
+            return render(request, 'mdproject/crypt.html', {
+                'mode': 'external',
+                'ext_status': f'Erro ao chamar a biblioteca C: {ex}',
+                'ext_status_error': True,
+            })
+
+        decrypted_text = ''
+        if status == 0 and DECRYPT_OUTPUT_FILE.exists():
+            decrypted_text = read_decrypted_text()
+            ext_status = 'Texto descriptografado com sucesso'
+            ext_error = False
+        else:
+            ext_status = 'Erro na descriptografia — verifique os valores de p, q e e.'
+            ext_error = True
+
+        return render(request, 'mdproject/crypt.html', {
+            'mode': 'external',
+            'ext_status': ext_status,
+            'ext_status_error': ext_error,
+            'decrypted_text': decrypted_text,
+        })
+
+    return render(request, 'mdproject/crypt.html', {'mode': 'external'})
+
+
 def descrypt(request):
     try:
         if request.method == 'POST':

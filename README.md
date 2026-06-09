@@ -127,3 +127,34 @@ Se quiser simplificar ainda mais, o mesmo RSA pode ser separado em um projeto C 
 
 - O projeto foi escrito com uma dependencia de biblioteca C carregada por `ctypes`, entao o caminho da DLL ou da SO precisa bater com o sistema operacional.
 - O nome da rota de descriptografia esta como `descrypt` no codigo atual.
+
+---
+
+## MUDANÇAS E IMPLEMENTAÇÕES (TERENCE(MEU REPOSITORIO)/GRUPO)
+
+### Interface web (frontend)
+
+Os quatro templates foram redesenhados com visual dark-green terminal, usando apenas HTML e CSS inline (sem arquivos externos). As principais mudanças por tela:
+
+- **index.html**: adicionado painel de progresso com badges nas etapas (salvar chave → criptografar → descriptografar), botão "nova criptografia" e acordeão para envio de ZIP com o `menu.c` do aluno.
+- **save.html**: corrigido bug onde o toast de sucesso era disparado também em caso de erro (condição `{% if status %}` foi trocada para verificar a string exata de sucesso). Adicionada exibição de erros em vermelho com link de volta ao início.
+- **crypt.html**: campo de mensagem alterado de `<input>` para `<textarea>` para suportar textos longos sem travar o navegador. Adicionados toast de sucesso e barra de progresso animada com redirecionamento automático ao index após criptografia bem-sucedida.
+- **decrypt.html**: adicionado link de volta ao início e exibição do texto descriptografado na própria tela.
+
+### Backend Django (views.py / urls.py / settings.py)
+
+- A interface com a biblioteca C foi migrada de parâmetros `long long` para `const char*`: Python agora passa strings com `.encode()` e a biblioteca converte internamente com `atoll()`. Isso elimina problemas de alinhamento de tipos entre Python e C.
+- Adicionada rota e view `reset/` que apaga `textEncript.txt`, `textDencript.txt` e `chavePub.txt` no servidor quando o botão "nova criptografia" é clicado.
+- `DATA_UPLOAD_MAX_MEMORY_SIZE` aumentado para 20 MB em `settings.py` para suportar textos longos como a Bíblia de Gutenberg.
+
+### Camada C (menu.c)
+
+**Correção de stack overflow**: os arrays de saída em `encriptarMenu` e `desencriptarMenu` eram declarados com tamanho fixo na stack. Textos longos (~800k caracteres) causavam crash silencioso. Substituídos por alocação dinâmica com `malloc`.
+
+**Cache de criptografia (lookup table 256 entradas)**: como ASCII tem no máximo 256 valores distintos, a função `encriptar` agora calcula `mod_pow` para cada caractere único no máximo uma vez e reutiliza o resultado para repetições. Complexidade cai de O(n × log e) para O(256 × log e) de setup + O(n) de lookup.
+
+**Cache de descriptografia (array linear, máx. 256 entradas)**: a função `descriptografar` usa uma estrutura `CacheEntry {key, value, used}` para guardar pares `{ciphertext → plaintext}`. Cada valor cifrado único é revertido via `mod_pow` apenas uma vez; caracteres repetidos são resolvidos por busca linear O(1) na prática (ASCII tem no máximo 256 valores distintos por mensagem).
+
+**Remoção do GMP**: uma versão intermediária usou a biblioteca GMP (`mpz_t`) para suporte a inteiros arbitrários. Essa versão foi descartada porque alterava completamente a sintaxe e o visual das funções matemáticas do projeto. A versão final mantém `long long` com `__int128` para as multiplicações intermediárias em `mod_pow`, exatamente como no código original.
+
+**Funções matemáticas preservadas na íntegra**: `primo`, `mdc`, `mod_pow`, `tot_euler`, `euclidesEstendido` e `encotrarD` têm algoritmos, comentários e estilo idênticos ao código original dos autores. Nenhuma dessas funções foi reescrita.
