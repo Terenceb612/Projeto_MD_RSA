@@ -208,11 +208,17 @@
         applyBadges();
 
         function resetAll() {
-            // limpa só os buffers de progresso — file input e demais campos não são tocados
             localStorage.removeItem('rsa_done_save');
             localStorage.removeItem('rsa_done_crypt');
             localStorage.removeItem('rsa_done_decrypt');
             applyBadges();
+
+            // apaga os arquivos no servidor (textEncript, textDencript, chavePub)
+            fetch("{% url 'mdproject:reset' %}", {
+                method: 'POST',
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            });
+
             const btn = document.getElementById('resetBtn');
             btn.classList.add('cleared');
             btn.innerHTML = '<span class="reset-icon">✓</span> pronto pra mais um segredo';

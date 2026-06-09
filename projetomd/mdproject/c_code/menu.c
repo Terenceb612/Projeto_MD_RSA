@@ -23,16 +23,16 @@ typedef struct {
     int used;
 } CacheEntry;
 
-static CacheEntry decrypt_cache[MAX_CACHE];
-static int cache_size = 0;
+CacheEntry decrypt_cache[MAX_CACHE];
+int cache_size = 0;
 
-static void cache_init(void)
+void cache_init(void)
 {
     cache_size = 0;
     memset(decrypt_cache, 0, sizeof(decrypt_cache));
 }
 
-static int cache_get(long long key, long long *out)
+int cache_get(long long key, long long *out)
 {
     for (int i = 0; i < cache_size; i++)
     {
@@ -45,7 +45,7 @@ static int cache_get(long long key, long long *out)
     return 0;
 }
 
-static void cache_set(long long key, long long value)
+void cache_set(long long key, long long value)
 {
     if (cache_size >= MAX_CACHE) return;
     decrypt_cache[cache_size].key   = key;
@@ -57,7 +57,7 @@ static void cache_set(long long key, long long value)
 
 ////////////////////////////////////////////////////
 // PROTOTIPOS DAS FUNCOES EXPORTADAS (chamadas pelo Django via ctypes)
-// Parametros são strings decimais: Python passa "12345" e o C converte com atoll().
+// Parametros sao strings decimais: Python passa "12345" e o C converte com atoll().
 ////////////////////////////////////////////////////
 
 int gerarChavePub(const char *p_str, const char *q_str, const char *e_str);
@@ -72,9 +72,9 @@ int desencriptarMenu(const char *p_str, const char *q_str, const char *e_str);
 
 /*terence:
 Se n tem um divisor, ele sempre vem em par: n = a * b
-Se a > raiz de n, então obrigatoriamente b < raiz de n, o menor sempre fica abaixo da raiz
-Logo, se nenhum número até √n divide n, não existe divisor — n é primo
-Usar i*i <= n evita importar math.h e é equivalente a i <= raiz de n
+Se a > raiz de n, entao obrigatoriamente b < raiz de n, o menor sempre fica abaixo da raiz
+Logo, se nenhum numero ate sqrt(n) divide n, nao existe divisor -- n e primo
+Usar i*i <= n evita importar math.h e e equivalente a i <= raiz de n
 */
 int primo(long long n)
 {
@@ -90,9 +90,9 @@ int primo(long long n)
 
 //cauet: mdc implementado
 /*
-A função verifica qual o maximo divisor comum entre dois numeros grandes, utilizando o algoritmo de euclides tradicional.
-A função usa aritmetica modular para simplificar a expressão ao máximo.
-Após a simplificação, encontra o mdc que é igual ao mdc da expressão original e retorna o resultado.
+A funcao verifica qual o maximo divisor comum entre dois numeros grandes, utilizando o algoritmo de euclides tradicional.
+A funcao usa aritmetica modular para simplificar a expressao ao maximo.
+Apos a simplificacao, encontra o mdc que e igual ao mdc da expressao original e retorna o resultado.
 */
 long long mdc(long long n1, long long n2)
 {
@@ -109,12 +109,12 @@ long long mdc(long long n1, long long n2)
 /*
 FUNCAO MOD POW
 
-terence: vou fazer uma maracutaia pra fazer a exponenciação ser mais eficiente
+terence: vou fazer uma maracutaia pra fazer a exponenciacao ser mais eficiente
 ela se baseia no fato de que qualquer expoente pode ser escrito em binario, ex: 7 = 111 (binario)
 a cada iteracao, "expoente/2" descarta o bit da iteracao atual e expoente%2 le o valor (0 ou 1)
 se for 0, nao inclui na soma
-a base é elevada ao quadrado a cada passo, o mod em cada produto serve pra o numero nunca crescer demais
-pq é melhor : se for elevando no seco fica O(n) multiplicacoes, essa solucao bacana ai faz com que seja O(logn), ideal pra quando o expoente crescer muito.
+a base e elevada ao quadrado a cada passo, o mod em cada produto serve pra o numero nunca crescer demais
+pq e melhor : se for elevando no seco fica O(n) multiplicacoes, essa solucao bacana ai faz com que seja O(logn), ideal pra quando o expoente crescer muito.
 exemplo : testa com o expoente sendo um milhao e ve.
 */
 long long mod_pow(long long base, long long exponent, long long modulus)
@@ -133,15 +133,15 @@ long long mod_pow(long long base, long long exponent, long long modulus)
     return resultado;
 }
 
-//cauet: função tot_euler feita, mas precisa ser revisada.
-//Função necessária para calcular a chave pública e privada.
+//cauet: funcao tot_euler feita, mas precisa ser revisada.
+//Funcao necessaria para calcular a chave publica e privada.
 long long tot_euler(long long p, long long q)
 {
     return (p - 1) * (q - 1);
 }
 
-//Função encontrarD implementada juntamente com o euclides estendido.
-//A função encontrarD usa o euclides estendido para calcular o valor d, pois d é o inverso multiplicativo de e
+//Funcao encontrarD implementada juntamente com o euclides estendido.
+//A funcao encontrarD usa o euclides estendido para calcular o valor d, pois d e o inverso multiplicativo de e
 void euclidesEstendido(long long a, long long b, long long *s, long long *t)
 {
     // caso base
@@ -185,7 +185,7 @@ long long encotrarD(long long e, long long p, long long q)
 ////////////////////////////////////////////////////
 
 
-static void criarChavePub(long long n, long long e)
+void criarChavePub(long long n, long long e)
 {
     FILE *file = fopen("chavePub.txt", "w");
     if (!file) return;
@@ -193,7 +193,7 @@ static void criarChavePub(long long n, long long e)
     fclose(file);
 }
 
-static int salvarEmArquivo(long long *enc, int tamanho)
+int salvarEmArquivo(long long *enc, int tamanho)
 {
     FILE *file = fopen("textEncript.txt", "w");
     if (file == NULL) return 1;
@@ -205,7 +205,7 @@ static int salvarEmArquivo(long long *enc, int tamanho)
     return 0;
 }
 
-static int salvarEmArquivoD(const char *mensagem, int tamanho)
+int salvarEmArquivoD(const char *mensagem, int tamanho)
 {
     FILE *file = fopen("textDencript.txt", "w");
 
@@ -231,10 +231,10 @@ static int salvarEmArquivoD(const char *mensagem, int tamanho)
 ////////////////////////////////////////////////////
 
 
-// Lookup table de 256 entradas — um slot por valor ASCII possível (0–255)
-// Cada valor é calculado no máximo uma vez, por mais longa que seja a mensagem.
-// Complexidade: O(256 × log e) setup + O(n) lookups, em vez de O(n × log e) sem cache.
-static void encriptar(const char *mensagem, long long *enc, long long n, long long e)
+// Lookup table de 256 entradas -- um slot por valor ASCII possivel (0-255)
+// Cada valor e calculado no maximo uma vez, por mais longa que seja a mensagem.
+// Complexidade: O(256 x log e) setup + O(n) lookups, em vez de O(n x log e) sem cache.
+void encriptar(const char *mensagem, long long *enc, long long n, long long e)
 {
     long long tabela[256];
     int computed[256];
@@ -253,9 +253,9 @@ static void encriptar(const char *mensagem, long long *enc, long long n, long lo
 }
 
 // Cache de ciphertext -> plaintext
-// Cada valor criptografado único é revertido apenas uma vez via mod_pow.
-// Chars repetidos são resolvidos por lookup O(1).
-static void descriptografar(long long *enc, int tamanho, long long d, long long n)
+// Cada valor criptografado unico e revertido apenas uma vez via mod_pow.
+// Chars repetidos sao resolvidos por lookup O(1).
+void descriptografar(long long *enc, int tamanho, long long d, long long n)
 {
     cache_init();
 
@@ -271,7 +271,7 @@ static void descriptografar(long long *enc, int tamanho, long long d, long long 
     }
 }
 
-static void convertascii(char *mensagem, long long *enc, int tamanho)
+void convertascii(char *mensagem, long long *enc, int tamanho)
 {
     for (int i = 0; i < tamanho; i++)
         mensagem[i] = (char)enc[i];

@@ -7,4 +7,5 @@ urlpatterns = [
     path('save/', views.save, name='save'),
     path('crypt/', views.crypt, name='crypt'),
     path('descrypt/', views.descrypt, name='descrypt'),
+    path('reset/', views.reset, name='reset'),
 ]

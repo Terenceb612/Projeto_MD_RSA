@@ -130,6 +130,17 @@ def index(request):
     return render(request, 'mdproject/index.html', {})
 
 
+def reset(request):
+    if request.method == 'POST':
+        for f in [PROJECT_ROOT / 'textEncript.txt',
+                  PROJECT_ROOT / 'textDencript.txt',
+                  PROJECT_ROOT / 'chavePub.txt']:
+            if f.exists():
+                f.unlink()
+        return JsonResponse({'ok': True})
+    return JsonResponse({'ok': False}, status=405)
+
+
 def upload_c_zip(request):
     if request.method != 'POST':
         return HttpResponse('Metodo nao permitido.', status=405)
