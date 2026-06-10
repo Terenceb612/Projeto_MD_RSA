@@ -155,6 +155,7 @@ Os quatro templates foram redesenhados com visual dark-green terminal, usando ap
 
 **Cache de descriptografia (array linear, máx. 256 entradas)**: a função `descriptografar` usa uma estrutura `CacheEntry {key, value, used}` para guardar pares `{ciphertext → plaintext}`. Cada valor cifrado único é revertido via `mod_pow` apenas uma vez; caracteres repetidos são resolvidos por busca linear O(1) na prática (ASCII tem no máximo 256 valores distintos por mensagem).
 
-**Remoção do GMP**: uma versão intermediária usou a biblioteca GMP (`mpz_t`) para suporte a inteiros arbitrários. Essa versão foi descartada porque alterava completamente a sintaxe e o visual das funções matemáticas do projeto. A versão final mantém `long long` com `__int128` para as multiplicações intermediárias em `mod_pow`, exatamente como no código original.
 
-**Funções matemáticas preservadas na íntegra**: `primo`, `mdc`, `mod_pow`, `tot_euler`, `euclidesEstendido` e `encotrarD` têm algoritmos, comentários e estilo idênticos ao código original dos autores. Nenhuma dessas funções foi reescrita.
+
+
+
